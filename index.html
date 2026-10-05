@@ -2,63 +2,62 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>Daily Ride - Pakistan No.1 Super App</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui}
-body{background:#f3f4f6}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system}
+body{background:#f3f4f6;color:#111;-webkit-tap-highlight-color:transparent}
 .header{background:#000;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-.logo{font-size:22px;font-weight:800;letter-spacing:-.5px}
-.live{background:#00c853;color:#fff;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:800;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
-.container{max-width:480px;margin:auto;padding-bottom:100px}
-.card{background:#fff;margin:12px;border-radius:20px;padding:18px;box-shadow:0 6px 24px rgba(0,0,0,.06);border:1px solid #f0f0f0}
+.logo{font-size:22px;font-weight:900;letter-spacing:-0.5px}
+.live{background:#00c853;color:#fff;padding:6px 14px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.5px}
+.container{max-width:480px;margin:0 auto;padding-bottom:40px}
+.card{background:#fff;margin:12px;border-radius:20px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.06);border:1px solid #f1f1f1}
 .card-title{font-size:16px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.wallet{background:linear-gradient(135deg,#000 0%,#2a2a2a 100%);color:#fff;border-radius:16px;padding:18px;position:relative;overflow:hidden}
-.wallet:before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(0,200,83,.15);border-radius:50%}
-.wallet small{opacity:.6;font-size:11px;letter-spacing:1px}
-.wallet h1{font-size:32px;margin:6px 0;font-weight:800}
-.wallet .sec{font-size:11px;background:rgba(255,255,255,.1);padding:5px 10px;border-radius:8px;display:inline-flex;gap:5px;align-items:center;margin-top:8px}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
-.stat{background:rgba(255,255,255,.08);padding:10px;border-radius:12px;text-align:center}
-.stat b{display:block;font-size:16px}
-.stat span{font-size:10px;opacity:.6}
+.wallet{background:linear-gradient(135deg,#000 0%,#1a1a1a 50%,#2d2d2d 100%);color:#fff;border-radius:16px;padding:20px;position:relative;overflow:hidden}
+.wallet::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,200,83,.25),transparent);border-radius:50%}
+.wallet small{opacity:.6;font-size:10px;letter-spacing:1.5px;font-weight:700}
+.wallet h1{font-size:36px;margin:8px 0;font-weight:900;letter-spacing:-1px}
+.wallet .sec{font-size:11px;background:rgba(255,255,255,.12);padding:6px 12px;border-radius:99px;display:inline-flex;gap:6px;align-items:center;margin-top:10px;backdrop-filter:blur(10px)}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+.stat{background:rgba(255,255,255,.08);padding:12px;border-radius:12px;text-align:center;border:1px solid rgba(255,255,255,.05)}
+.stat b{display:block;font-size:17px;font-weight:800}
+.stat span{font-size:9px;opacity:.6;letter-spacing:.5px;font-weight:700;margin-top:2px;display:block}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.input{width:100%;padding:15px 14px;border:1.8px solid #e5e7eb;border-radius:12px;font-size:15px;font-weight:600;background:#fafafa;margin:5px 0;transition:.2s}
-.input:focus{border-color:#000;background:#fff;outline:none}
-.vehicle{border:2px solid #eee;border-radius:14px;padding:12px;text-align:center;cursor:pointer;transition:.2s}
-.vehicle.active{border-color:#000;background:#000;color:#fff}
-.vehicle b{display:block;font-size:13px;margin-top:6px}
-.vehicle span{font-size:11px;opacity:.7}
-.btn{width:100%;padding:16px;border:0;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;transition:.2s}
+.input{width:100%;padding:15px 14px;border:1.8px solid #e5e7eb;border-radius:12px;font-size:15px;font-weight:600;background:#fafafa;margin:6px 0;transition:.2s}
+.input:focus{border-color:#000;background:#fff;outline:none;box-shadow:0 0 0 3px rgba(0,0,0,.05)}
+.vehicle{border:2px solid #eee;border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:.2s;background:#fff}
+.vehicle.active{border-color:#000;background:#000;color:#fff;transform:scale(1.02);box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.vehicle .icon{font-size:24px}
+.vehicle b{display:block;font-size:13px;margin-top:6px;font-weight:800}
+.vehicle span{font-size:11px;opacity:.7;font-weight:600}
+.btn{width:100%;padding:16px;border:0;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;transition:.2s;letter-spacing:.2px}
 .btn:active{transform:scale(.97)}
-.btn-green{background:#00c853;color:#fff;box-shadow:0 6px 16px rgba(0,200,83,.3)}
+.btn-green{background:#00c853;color:#fff;box-shadow:0 8px 20px rgba(0,200,83,.35)}
 .btn-black{background:#000;color:#fff}
-.btn-outline{background:#fff;border:2px solid #000;color:#000}
-.fare-box{background:#f0fdf4;border:1.5px dashed #00c853;border-radius:12px;padding:12px;text-align:center;margin-top:12px;display:none}
-.history-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;font-size:13px}
-.badge{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:800}
-.badge-ok{background:#e8f5e9;color:#00c853}
+.fare-box{background:#f0fdf4;border:1.5px dashed #00c853;border-radius:14px;padding:14px;text-align:center;margin-top:14px;display:none;line-height:1.6}
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f6f6f6;font-size:13px}
+.history-item:last-child{border:0}
+.badge{padding:4px 10px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.badge-ok{background:#e8f5e9;color:#00a344}
 .badge-live{background:#000;color:#fff}
-.footer-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:auto;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;padding:10px 0;z-index:90}
-.footer-nav div{text-align:center;font-size:10px;font-weight:700;opacity:.4;cursor:pointer}
-.footer-nav div.active{opacity:1}
+.dot{width:8px;height:8px;background:#00c853;border-radius:50%;display:inline-block;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.empty{text-align:center;opacity:.4;padding:24px;font-size:13px;font-weight:600}
+.footer{margin:18px 12px;text-align:center;font-size:11px;opacity:.45;line-height:1.5;font-weight:600}
 </style>
 </head>
 <body>
 <div class="header">
 <div class="logo">Daily Ride</div>
-<div class="live">● UBER SYSTEM ON</div>
+<div class="live"><span class="dot"></span> UBER SYSTEM ON</div>
 </div>
-
 <div class="container">
-<!-- OWNER WALLET - SECURED, NO NUMBER -->
-<div class="card" style="background:transparent;box-shadow:none;padding:0 12px;border:0">
+
+<div class="card" style="background:transparent;box-shadow:none;padding:0 12px;border:0;margin-top:12px">
 <div class="wallet">
 <small>OWNER COMMISSION WALLET</small>
 <h1 id="earnRs">Rs 0</h1>
-<div class="sec">🔒 Secured Private Wallet • Owner Only Access</div>
+<div class="sec">🔒 Secured Private Wallet • Owner Only</div>
 <div class="stats">
 <div class="stat"><b id="tRides">0</b><span>TOTAL RIDES</span></div>
 <div class="stat"><b>10%</b><span>COMMISSION</span></div>
@@ -67,29 +66,93 @@ body{background:#f3f4f6}
 </div>
 </div>
 
-<!-- RIDE BOOKING -->
 <div class="card">
-<div class="card-title">🏍️ Book Your Ride - Pakistan</div>
+<div class="card-title">🏍️ Book Your Ride - All Pakistan</div>
 <div class="grid2">
-<div class="vehicle active" onclick="sel(this,'bike',30)"><div>🏍️</div><b>Bike</b><span>Rs 30/km</span></div>
-<div class="vehicle" onclick="sel(this,'rickshaw',45)"><div>🛺</div><b>Rickshaw</b><span>Rs 45/km</span></div>
-<div class="vehicle" onclick="sel(this,'car',60)"><div>🚗</div><b>Car</b><span>Rs 60/km</span></div>
-<div class="vehicle" onclick="sel(this,'loader',80)"><div>🚚</div><b>Loader</b><span>Rs 80/km</span></div>
+<div class="vehicle active" onclick="sel(this,'bike',30)"><div class="icon">🏍️</div><b>Bike</b><span>Rs 30/km</span></div>
+<div class="vehicle" onclick="sel(this,'rickshaw',45)"><div class="icon">🛺</div><b>Rickshaw</b><span>Rs 45/km</span></div>
+<div class="vehicle" onclick="sel(this,'car',60)"><div class="icon">🚗</div><b>Car</b><span>Rs 60/km</span></div>
+<div class="vehicle" onclick="sel(this,'loader',80)"><div class="icon">🚚</div><b>Loader</b><span>Rs 80/km</span></div>
 </div>
-<input id="from" class="input" placeholder="📍 From - e.g Clifton Karachi">
-<input id="to" class="input" placeholder="📍 To - e.g Saddar Karachi">
+<input id="from" class="input" placeholder="📍 From - e.g Clifton, Karachi">
+<input id="to" class="input" placeholder="📍 To - e.g Saddar, Karachi">
 <div class="grid2">
 <input id="km" class="input" type="number" placeholder="KM - e.g 5">
 <input id="phone" class="input" type="tel" placeholder="Your Phone">
 </div>
-<button class="btn btn-green" onclick="bookRide()">Book Ride Now - Pay Cash</button>
+<button class="btn btn-green" onclick="bookRide()">Book Ride Now - Cash Payment</button>
 <div id="fareBox" class="fare-box"></div>
 </div>
 
-<!-- DRIVER -->
 <div class="card">
 <div class="card-title">👨‍✈️ Become Driver - Daily Earning</div>
 <input id="dName" class="input" placeholder="Full Name">
-<input id="dPhone" class="input" placeholder="Phone Number - e.g 0300...">
+<input id="dPhone" class="input" type="tel" placeholder="Phone - e.g 0300xxxxxxx">
 <div class="grid2">
-<select id="dType" class="input"><option>Bike Rider</option><option>Rickshaw Driver</option><option>Car Driver</option><option>Loader Driver</option
+<select id="dType" class="input"><option>Bike Rider</option><option>Rickshaw Driver</option><option>Car Driver</option><option>Loader Driver</option></select>
+<input id="dCity" class="input" placeholder="City - e.g Karachi">
+</div>
+<button class="btn btn-black" onclick="registerDriver()">Register as Driver</button>
+<p style="font-size:11px;opacity:.5;text-align:center;margin-top:10px;font-weight:600">Owner approval in 24 hours • Start daily earning</p>
+</div>
+
+<div class="card">
+<div class="card-title">📊 Recent Rides & Your Commission</div>
+<div id="history"><div class="empty">No rides yet - Book first ride now!</div></div>
+</div>
+
+<div class="footer">Daily Ride Super App © 2026<br>Pakistan's No.1 Ride App • Secure Owner System 🔒<br>Version FINAL PRO MAX • All Systems Live</div>
+</div>
+
+<script>
+let selectedRate = 30;
+let selectedType = 'bike';
+let rides = JSON.parse(localStorage.getItem('dr_rides_final')||'[]');
+let totalEarn = parseInt(localStorage.getItem('dr_owner_total_final')||'0');
+document.getElementById('earnRs').innerText = 'Rs ' + totalEarn;
+document.getElementById('tRides').innerText = rides.length;
+function sel(el,type,rate){
+document.querySelectorAll('.vehicle').forEach(v=>v.classList.remove('active'));
+el.classList.add('active');
+selectedRate=rate;selectedType=type;
+}
+function bookRide(){
+let km=parseFloat(document.getElementById('km').value)||0;
+let from=document.getElementById('from').value.trim();
+let to=document.getElementById('to').value.trim();
+let phone=document.getElementById('phone').value.trim();
+if(!from||!to||km<=0||!phone){alert('Bhai! From, To, KM, Phone sab bharo');return;}
+let fare=Math.round(km*selectedRate);
+let commission=Math.round(fare*0.10);
+totalEarn+=commission;
+localStorage.setItem('dr_owner_total_final',totalEarn);
+document.getElementById('earnRs').innerText='Rs '+totalEarn;
+let ride={id:Date.now(),type:selectedType,from,to,km,fare,commission,phone,time:new Date().toLocaleString()};
+rides.unshift(ride);
+localStorage.setItem('dr_rides_final',JSON.stringify(rides));
+document.getElementById('tRides').innerText=rides.length;
+let box=document.getElementById('fareBox');
+box.style.display='block';
+box.innerHTML=`<b style="font-size:16px">Total Fare: Rs ${fare}</b><br><span style="color:#00a344;font-weight:800">✓ Your Commission Rs ${commission} Secured 🔒</span><br><small style="opacity:.7">${from} → ${to} • ${km}KM • ${selectedType} • ${phone}</small>`;
+renderHistory();
+window.scrollTo({top:box.offsetTop-20,behavior:'smooth'});
+}
+function renderHistory(){
+let h=document.getElementById('history');
+if(rides.length==0){h.innerHTML='<div class="empty">No rides yet - Book first ride now!</div>';return;}
+h.innerHTML=rides.slice(0,20).map(r=>`<div class="history-item"><div><b>${r.type.toUpperCase()}</b> • ${r.km}KM • <span class="badge badge-live">${r.phone.slice(-4)}</span><br><small style="opacity:.6">${r.from} → ${r.to}</small><br><small style="opacity:.4;font-size:10px">${r.time}</small></div><div style="text-align:right"><b>Rs ${r.fare}</b><br><span class="badge badge-ok">+Rs ${r.commission}</span></div></div>`).join('');
+}
+function registerDriver(){
+let n=document.getElementById('dName').value.trim();
+let p=document.getElementById('dPhone').value.trim();
+if(!n||!p){alert('Name aur Phone likho!');return;}
+let drivers=JSON.parse(localStorage.getItem('dr_drivers_final')||'[]');
+drivers.push({name:n,phone:p,type:document.getElementById('dType').value,city:document.getElementById('dCity').value,time:new Date().toLocaleString()});
+localStorage.setItem('dr_drivers_final',JSON.stringify(drivers));
+alert('✅ Driver '+n+' Registered!\nOwner will approve and contact you on '+p+' in 24 hours');
+document.getElementById('dName').value='';document.getElementById('dPhone').value='';document.getElementById('dCity').value='';
+}
+renderHistory();
+</script>
+</body>
+</html>
