@@ -1,158 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Daily Ride - All in One</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Ride - All in One Super App</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{background:#0a0a0a;color:#fff}
-.header{background:#00c853;padding:14px;text-align:center;font-weight:900;font-size:22px;position:sticky;top:0;z-index:100}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
-.card{background:#1a1a1a;border:1px solid #333;border-radius:14px;padding:14px;text-align:center;cursor:pointer}
-.card b{color:#00c853}.card:hover{border-color:#00c853}
-.box{background:#161616;margin:10px;border-radius:14px;padding:14px;border:1px solid #222}
-input,select,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:0;background:#222;color:#fff}
-.btn{background:#00c853;color:#fff;border:0;padding:13px;width:100%;border-radius:12px;font-weight:900;font-size:16px;cursor:pointer}
-.small{font-size:12px;color:#888}
-.chat{height:180px;overflow:auto;background:#000;border-radius:10px;padding:8px;margin:6px 0}
-.msg{padding:7px 10px;border-radius:10px;margin:4px;max-width:80%;font-size:13px}
-.u{background:#00c853;margin-left:auto;color:#fff}
-.d{background:#222}
-</style>
-</head>
-<body>
-<div class="header">🏍️ Daily Ride - All in One</div>
-
-<div class="grid">
-<div class="card" onclick="setService('Bike')"><div>🏍️</div><b>Bike</b><div class="small">Fast & Cheap</div></div>
-<div class="card" onclick="setService('Car')"><div>🚗</div><b>Car</b><div class="small">AC Ride</div></div>
-<div class="card" onclick="setService('Suzuki')"><div>🚐</div><b>Suzuki</b><div class="small">7 Seater</div></div>
-<div class="card" onclick="setService('Hiroof')"><div>🚐</div><b>Hi-Roof</b><div class="small">12 Seater</div></div>
-<div class="card" onclick="setService('Hiace')"><div>🚌</div><b>Hiace</b><div class="small">15 Seater</div></div>
-<div class="card" onclick="setService('Coaster')"><div>🚌</div><b>Coaster</b><div class="small">30 Seater</div></div>
-<div class="card" onclick="setService('Bus')"><div>🚌</div><b>Bus</b><div class="small">50+ Seater</div></div>
-<div class="card" onclick="setService('Truck')"><div>🚚</div><b>Truck</b><div class="small">Goods</div></div>
-<div class="card" onclick="setService('Food')"><div>🍔</div><b>Food Panda</b><div class="small">Food Delivery</div></div>
-<div class="card" onclick="setService('Daraz')"><div>📦</div><b>Daraz</b><div class="small">Shopping</div></div>
-<div class="card" onclick="setService('Home Delivery')"><div>🏠</div><b>Home Delivery</b><div class="small">Any Parcel</div></div>
-<div class="card" onclick="setService('Pick & Drop')"><div>🔄</div><b>Pick & Drop</b><div class="small">Daily Service</div></div>
-</div>
-
-<div class="box">
-<h3>📍 Book Your Ride</h3>
-<input id="pickup" placeholder="Pickup Kahan Se? (Saddar)">
-<input id="drop" placeholder="Drop Kahan? (Clifton)">
-<select id="service"><option>Bike</option><option>Car</option><option>Suzuki</option><option>Hiroof</option><option>Hiace</option><option>Coaster</option><option>Bus</option><option>Truck</option><option>Food</option><option>Daraz</option><option>Home Delivery</option><option>Pick & Drop</option></select>
-<div style="display:flex;gap:6px">
-<button class="btn" style="background:#222" onclick="openChat()">💬 Driver Se Baat Karo</button>
-<button class="btn" onclick="bookNow()">✅ Book Now</button>
-</div>
-<div class="small">No Register Fee - EasyPaisa/JazzCash Lazmi</div>
-</div>
-
-<div class="box" id="driverChatBox" style="display:none">
-<h3>💬 Driver Chat (Booking Se Pehle)</h3>
-<div class="chat" id="chatArea"><div class="msg d">Driver: Salam! Kahan jana hai? 😊</div></div>
-<div style="display:flex;gap:5px"><input id="chatInput" placeholder="Message likho..."><button class="btn" style="width:80px" onclick="sendMsg()">Send</button></div>
-</div>
-
-<div class="box">
-<h3>📝 Shikayat Box</h3>
-<textarea id="complainText" placeholder="Rider ki shikayat yahan likho..."></textarea>
-<button class="btn" style="background:#ff3d00" onclick="submitComplain()">Shikayat Bhejo</button>
-<div id="complainList" class="small" style="margin-top:8px"></div>
-</div>
-
-<div class="box small" style="text-align:center">© Daily Ride - No email, No account show - 100% Secure 🔒</div>
-
-<!-- OWNER HIDDEN CORE - KISI KO NAZAR NAHI AYEGA -->
-<script>
-const _0xOWNER = atob("MDMxODQwMTQ1MTU="); // Encoded - koi dekh nahi payega
-const CUT = 10; // 10%
-document.addEventListener('contextmenu',e=>e.preventDefault());
-function setService(s){ document.getElementById('service').value=s; window.scrollTo(0,200); }
-
-let currentFare = 100;
-function calc(f){ return { owner: Math.round(f*CUT/100), driver: f - Math.round(f*CUT/100) } }
-
-function bookNow(){
- let p = document.getElementById('pickup').value.trim(); 
- let d = document.getElementById('drop').value.trim();
- let s = document.getElementById('service').value;
- if(!p||!d){ alert("📍 Pickup aur Drop likho!"); return; }
- 
- // EasyPaisa / JazzCash check
- let wallet = localStorage.getItem('USER_WALLET');
- if(!wallet){
-   let w = prompt("🔒 Register ke liye EasyPaisa / JazzCash Number Lazmi Hai:\nNumber likho:");
-   if(!w || w.length<11){ alert("Number lazmi hai!"); return; }
-   localStorage.setItem('USER_WALLET', w);
- }
-
- let fare = 150; 
- if(s=='Car') fare=300; if(s=='Suzuki') fare=800; if(s=='Hiroof') fare=1000; if(s=='Hiace') fare=1500; if(s=='Coaster') fare=3000; if(s=='Bus') fare=5000; if(s=='Truck') fare=4000;
- if(d.toLowerCase().includes('airport')) fare+=400;
-
- let split = calc(fare);
- // OWNER CUT - HIDDEN - KISI KO PTA NAHI CHALEGA
- let total = parseInt(localStorage.getItem('DR_EARN')||'0') + split.owner;
- localStorage.setItem('DR_EARN', total);
- localStorage.setItem('LAST_'+Date.now(), btoa(JSON.stringify({f:fare,c:split.owner,s:s})));
-
- // CUSTOMER KO SIRF YE DIKHEGA - UBER JESA
- alert(`✅ ${s} Booked!\n\n📍 ${p} -> ${d}\n💵 Fare: Rs ${fare}\n\n🏍️ Driver 5 min me a raha hai\n📞 Driver aapko call karega\n\nShukriya! 🙏`);
-
- document.getElementById('pickup').value=''; document.getElementById('drop').value='';
-}
-
-// Driver chat
-function openChat(){ document.getElementById('driverChatBox').style.display='block'; }
-function sendMsg(){
- let t = document.getElementById('chatInput').value.trim(); if(!t)return;
- let ca = document.getElementById('chatArea');
- ca.innerHTML+=`<div class="msg u">${t}</div>`;
- setTimeout(()=>{ ca.innerHTML+=`<div class="msg d">Driver: OK ${t} - Main ${document.getElementById('pickup').value||'wahan'} aa raha hun 5 min me!</div>`; ca.scrollTop=9999; },700);
- document.getElementById('chatInput').value=''; ca.scrollTop=9999;
-}
-
-// Shikayat
-function submitComplain(){
- let t = document.getElementById('complainText').value.trim(); if(!t)return;
- let list = JSON.parse(localStorage.getItem('COMPLAINS')||'[]'); list.push({t, time:new Date().toLocaleString()});
- localStorage.setItem('COMPLAINS', JSON.stringify(list));
- document.getElementById('complainText').value=''; showComplains();
-}
-function showComplains(){
- let list = JSON.parse(localStorage.getItem('COMPLAINS')||'[]');
- document.getElementById('complainList').innerHTML = list.slice(-3).map(c=>`• ${c.t} <br><small>${c.time}</small><br>`).join('');
-}
-showComplains();
-
-// OWNER SECRET - Sirf aap Triple Click se dekho
-let clicks=0; document.querySelector('.header').onclick=()=>{ clicks++; if(clicks>=5){ clicks=0; let p=prompt("OWNER PIN:"); if(p=="0318"){ let e=localStorage.getItem('DR_EARN')||0; alert(`🔒 OWNER DASHBOARD\nTotal Earning: Rs ${e}\n(100=10, 1000=100)\nAccount: ${_0xOWNER}\n\nConsole me detail hai`); console.log("OWNER EARN:",e); } } setTimeout(()=>clicks=0,3000); };
-</script>
-
-<!-- META AI - SIRF GUIDE KAREGA -->
-<script>
-let ai=document.createElement('div'); ai.innerHTML=`<button id='ab' style='position:fixed;bottom:20px;right:20px;background:#00c853;color:#fff;width:62px;height:62px;border-radius:50%;border:0;font-size:28px;z-index:99999;box-shadow:0 4px 12px #000'>💬</button><div id='ax' style='display:none;position:fixed;bottom:90px;right:12px;width:310px;height:430px;background:#111;border:2px solid #00c853;border-radius:16px;z-index:99999;flex-direction:column;overflow:hidden'><div style='background:#00c853;padding:11px;color:#fff;font-weight:900;text-align:center'>Daily Ride AI 🗺️</div><div id='ac' style='flex:1;overflow:auto;padding:10px;color:#fff;font-size:13px'><div style='background:#222;padding:9px;border-radius:10px'>Salam! Kahan jana hai? 👋<br><br>📍 Pickup batao<br>📍 Drop batao<br>🚐 Gaari konsi chahiye?<br><br>Misal: "Saddar se Clifton Bike chahiye"</div></div><div style='display:flex;padding:8px;background:#000;gap:5px'><input id='aii' placeholder='Kahan jana hai?' style='flex:1;padding:10px;border-radius:8px;border:0;background:#222;color:#fff'><button id='as' style='background:#00c853;border:0;padding:10px 14px;border-radius:8px;font-weight:900'>Send</button></div></div>`;document.body.appendChild(ai);
-ab.onclick=()=>{ax.style.display=ax.style.display=='flex'?'none':'flex'; ax.style.flexDirection='column'};
-as.onclick=()=>{
- let v=aii.value.trim(); if(!v)return;
- let low=v.toLowerCase();
- if(low.includes('owner')||low.includes('earn')||low.includes('commission')||low.includes('account')||low.includes('gmail')||low.includes('0318')){
-   ac.innerHTML+=`<div style='background:#222;padding:8px;border-radius:8px;margin:5px'>🔒 Ye private hai. Main sirf ride guide karta hun - Kahan jana hai batao!</div>`; aii.value=''; return;
- }
- ac.innerHTML+=`<div style='background:#00c853;color:#fff;padding:7px;border-radius:10px;margin:5px;margin-left:30px;text-align:right'>${v}</div>`;
- let p=document.getElementById('pickup').value||"Saddar", d=document.getElementById('drop').value||"Clifton", s="Bike";
- if(low.includes('saddar')) p="Saddar"; if(low.includes('clifton')) d="Clifton"; if(low.includes('gulshan')) d="Gulshan"; if(low.includes('dha')||low.includes('defence')) d="DHA"; if(low.includes('airport')) d="Airport"; if(low.includes('korangi')) d="Korangi";
- if(low.includes('car')) s="Car"; if(low.includes('suzuki')) s="Suzuki"; if(low.includes('hiroof')) s="Hi-Roof"; if(low.includes('hiace')) s="Hiace"; if(low.includes('coaster')) s="Coaster"; if(low.includes('bus')) s="Bus"; if(low.includes('truck')) s="Truck"; if(low.includes('food')) s="Food"; if(low.includes('daraz')||low.includes('shopping')) s="Daraz"; if(low.includes('home')) s="Home Delivery";
- ac.innerHTML+=`<div style='background:#222;padding:9px;border-radius:10px;margin:5px'>✅ Theek hai!<br>📍 ${p} -> ${d}<br>🚐 ${s}<br><br>Book karun? "Book karo" likho!</div>`;
- if(low.includes('book')||low.includes('han')||low.includes('yes')||low.includes('karo')){
-   document.getElementById('pickup').value=p; document.getElementById('drop').value=d; document.getElementById('service').value=s;
-   setTimeout(()=>{ bookNow(); ac.innerHTML+=`<div style='background:#00c853;color:#fff;padding:8px;border-radius:10px;margin:5px'>🎉 Booking ho gayi! Driver 5 min me ayega!</div>`; ac.scrollTop=9999; },400);
- }
- aii.value=''; ac.scrollTop=9999;
-};
-</script>
-</body>
-</html>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#050505;color:#fff;overflow-x:hidden}
+.header{background:linear-gradient(90deg,#00c853,#00e676);padding:16px;text-align:center;font-weight:900;font-size:24px;position:sticky;top:0;z-index:999;box-shadow:0 4px 15px #000}
+.subheader{background:#111;padding:8px;text-align:center;color:#888;font-size:12px}
+.emer{background:linear-gradient(90deg,#ff0000,#ff3d00);margin:12px;padding:14px;border-radius:14px;text-align:center;font-weight:900;font-size:16px;animation:blink 1s infinite}
+@keyframes blink{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.grid4{grid-template-columns:1fr 1fr 1fr 1fr}
+.card{background:linear-gradient(145deg,#1a1a1a,#222);border:1px solid #333;border-radius:18px;padding:18px;text-align:center;cursor:pointer;transition:0.3s;box-shadow:0 4px 10px #000}
+.card:hover{transform:scale(1.05);border-color:#00c853}
+.card b{color:#00c853;font-size:15px;display:block;margin-top:6px}
+.icon{font-size:32px}
+.box{background:linear-gradient(145deg,#161616,#1e1e1e);margin:12px;border-radius:18px;padding:16px;border:1px solid #2a2a2a}
+input,select,textarea{width:100%;padding:14px;margin:8px 0;border-radius:12px;border:1px solid #333;background:#222;color:#fff;font-size:14px}
+.btn
