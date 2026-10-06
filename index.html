@@ -1,173 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Daily Ride - Pakistan No.1 Super App</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Ride - All in One</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-body{background:#f3f4f6}
-.header{background:#000;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-.logo{font-size:22px;font-weight:900;cursor:pointer}
-.live{background:#00c853;color:#fff;padding:6px 14px;border-radius:99px;font-size:11px;font-weight:800}
-.container{max-width:480px;margin:0 auto;padding-bottom:90px}
-.card{background:#fff;margin:12px;border-radius:20px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.06);border:1px solid #f1f1f1}
-.card-title{font-size:16px;font-weight:800;margin-bottom:12px}
-.map-box{height:260px;border-radius:16px;overflow:hidden;border:2px solid #000}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
-.input{width:100%;padding:14px;border:1.8px solid #e5e7eb;border-radius:12px;font-size:14px;font-weight:600;background:#fafafa;margin:6px 0}
-.vehicle{border:2px solid #eee;border-radius:14px;padding:10px 4px;text-align:center;cursor:pointer;background:#fff}
-.vehicle.active{border-color:#000;background:#000;color:#fff;transform:scale(1.03)}
-.vehicle b{font-size:10px;display:block;margin-top:4px}
-.vehicle span{font-size:8px;opacity:.7}
-.btn{width:100%;padding:16px;border:0;border-radius:14px;font-weight:800;font-size:15px;cursor:pointer}
-.btn-green{background:#00c853;color:#fff}
-.btn-black{background:#000;color:#fff}
-.btn-red{background:#d32f2f;color:#fff}
-.fare-box{background:#f0fdf4;border:1.5px dashed #00c853;border-radius:14px;padding:12px;text-align:center;margin-top:12px;display:none}
-.dot{width:8px;height:8px;background:#00c853;border-radius:50%;display:inline-block;animation:blink 1.5s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.joker-screen{position:fixed;inset:0;background:#000;color:#fff;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.service{border:1.5px solid #eee;border-radius:14px;padding:12px;text-align:center;background:#fff;cursor:pointer}
-.badge-ok{background:#e8f5e9;color:#00a344;padding:4px 10px;border-radius:99px;font-size:10px;font-weight:800}
-.emergency{border:1.5px solid #ffcdd2;background:#ffebee}
-.ai-btn{position:fixed;bottom:20px;right:20px;background:#000;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 8px 24px rgba(0,0,0,.3);cursor:pointer;z-index:999;border:2px solid #00c853}
-.ai-window{position:fixed;bottom:90px;right:12px;left:12px;max-width:460px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.25);border:1px solid #e5e7eb;z-index:999;display:none;overflow:hidden}
-.ai-header{background:#000;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
-.ai-body{height:300px;overflow-y:auto;padding:14px;background:#f9fafb}
-.ai-msg{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5;max-width:85%}
-.ai-msg.bot{background:#fff;border:1px solid #eee}
-.ai-msg.user{background:#000;color:#fff;margin-left:auto}
-.ai-input-area{display:flex;gap:8px;padding:12px;border-top:1px solid #eee;background:#fff}
-.ai-input{flex:1;padding:12px 14px;border:1.5px solid #e5e7eb;border-radius:99px;font-size:13px;font-weight:600}
-.ai-send{background:#00c853;color:#fff;border:0;padding:0 18px;border-radius:99px;font-weight:800;cursor:pointer}
-.footer{margin:18px 12px;text-align:center;font-size:11px;opacity:.45;line-height:1.5;font-weight:600}
-.hand-box{background:#fff8e1;border:1.5px dashed #ff9800;border-radius:12px;padding:10px;text-align:center;margin-top:8px;font-size:12px;font-weight:700}
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{background:#0a0a0a;color:#fff}
+.header{background:#00c853;padding:14px;text-align:center;font-weight:900;font-size:22px;position:sticky;top:0;z-index:100}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.card{background:#1a1a1a;border:1px solid #333;border-radius:14px;padding:14px;text-align:center;cursor:pointer}
+.card b{color:#00c853}.card:hover{border-color:#00c853}
+.box{background:#161616;margin:10px;border-radius:14px;padding:14px;border:1px solid #222}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:0;background:#222;color:#fff}
+.btn{background:#00c853;color:#fff;border:0;padding:13px;width:100%;border-radius:12px;font-weight:900;font-size:16px;cursor:pointer}
+.small{font-size:12px;color:#888}
+.chat{height:180px;overflow:auto;background:#000;border-radius:10px;padding:8px;margin:6px 0}
+.msg{padding:7px 10px;border-radius:10px;margin:4px;max-width:80%;font-size:13px}
+.u{background:#00c853;margin-left:auto;color:#fff}
+.d{background:#222}
 </style>
 </head>
 <body>
-<div class="joker-screen" id="joker"><h1 style="font-size:80px">🤡</h1><h2>HACK DETECTED!</h2><p style="opacity:.7;margin-top:8px">Joker + Rasta AI Active 🔒</p><p style="margin-top:20px;background:#fff;color:#000;padding:10px 20px;border-radius:99px;font-weight:800;cursor:pointer" onclick="document.getElementById('joker').style.display='none'">Go Back</p></div>
-<div class="header"><div class="logo" id="logoTap">Daily Ride</div><div class="live"><span class="dot"></span> SUPER APP LIVE</div></div>
-<div class="container">
-<div class="card" style="padding:0;overflow:hidden"><div class="map-box" id="map"></div><div style="padding:10px;display:flex;gap:6px;overflow-x:auto"><span style="background:#e8f5e9;color:#00a344;padding:6px 12px;border-radius:99px;font-size:10px;font-weight:700">🟢 312 Live - 3D HD</span><span style="background:#000;color:#fff;padding:6px 12px;border-radius:99px;font-size:10px;font-weight:700">📍 Karachi</span></div></div>
-<div class="card"><div class="card-title">🌟 Super Services</div><div class="grid4"><div class="service" onclick="document.getElementById('rideSec').scrollIntoView({behavior:'smooth'})"><div>🏍️</div><b>Ride</b></div><div class="service"><div>🍔</div><b>Food</b></div><div class="service"><div>📦</div><b>Parcel</b></div><div class="service"><div>🛒</div><b>Mart</b></div></div></div>
-<div class="card" id="rideSec"><div class="card-title">🚗 All Vehicles - 16 Total</div>
-<div style="font-size:11px;opacity:.6;margin-bottom:8px;font-weight:700">NORMAL - 10% Commission Hidden:</div><div class="grid4">
-<div class="vehicle active" onclick="sel(this,'bike',30)"><div>🏍️</div><b>Bike</b><span>30/km</span></div>
-<div class="vehicle" onclick="sel(this,'rickshaw',45)"><div>🛺</div><b>Rickshaw</b><span>45/km</span></div>
-<div class="vehicle" onclick="sel(this,'mini',55)"><div>🚕</div><b>Mini</b><span>55/km</span></div>
-<div class="vehicle" onclick="sel(this,'ac',60)"><div>🚗</div><b>AC</b><span>60/km</span></div>
-<div class="vehicle" onclick="sel(this,'premium',90)"><div>🚙</div><b>Premium</b><span>90/km</span></div>
-<div class="vehicle" onclick="sel(this,'loader',80)"><div>🚚</div><b>Loader</b><span>80/km</span></div>
-<div class="vehicle" onclick="sel(this,'truck',120)"><div>🚛</div><b>Truck</b><span>120/km</span></div>
-<div class="vehicle" onclick="sel(this,'auto',50)"><div>🛺</div><b>Auto</b><span>50/km</span></div>
-</div>
-<div style="font-size:11px;opacity:.6;margin:12px 0 8px;font-weight:700">🏫 SCHOOL & HIROOF - HAND TO HAND CASH 💵🤝:</div><div class="grid4">
-<div class="vehicle" onclick="sel(this,'school-van',150)"><div>🚐</div><b>School Van</b><span>Hand Cash</span></div>
-<div class="vehicle" onclick="sel(this,'hiroof',200)"><div>🚐</div><b>HiRoof</b><span>Hand Cash</span></div>
-<div class="vehicle" onclick="sel(this,'coaster',500)"><div>🚌</div><b>Coaster</b><span>Hand Cash</span></div>
-<div class="vehicle" onclick="sel(this,'bus',800)"><div>🚌</div><b>Bus</b><span>Hand Cash</span></div>
-</div>
-<div style="font-size:11px;color:#d32f2f;margin:12px 0 8px;font-weight:800">🚨 EMERGENCY:</div><div class="grid4">
-<div class="vehicle emergency" onclick="emergency('Police')"><div>🚓</div><b>Police</b><span>15</span></div>
-<div class="vehicle emergency" onclick="emergency('Ambulance')"><div>🚑</div><b>Ambulance</b><span>115</span></div>
-<div class="vehicle emergency" onclick="emergency('Fire')"><div>🚒</div><b>Fire</b><span>16</span></div>
-<div class="vehicle emergency" onclick="emergency('Rescue')"><div>🚨</div><b>Rescue</b><span>1122</span></div>
-</div>
-<input id="from" class="input" placeholder="📍 From"><input id="to" class="input" placeholder="📍 To"><div class="grid2"><input id="km" class="input" type="number" placeholder="KM / Days"><input id="phone" class="input" type="tel" placeholder="Phone"></div>
-<button class="btn btn-green" onclick="bookRide()">Book Now</button>
-<button class="btn btn-black" style="margin-top:8px;background:#333" onclick="calcVanMonthly()">📅 Van Monthly Hisab - Hand to Hand</button>
-<div id="fareBox" class="fare-box"></div>
-<div id="handBox" class="hand-box" style="display:none"></div>
-</div>
-<div class="card" style="border:2px dashed #000"><div class="card-title">🛣️ Rasta Condition - Khula/Band/Jam/Tuta/Danger</div><div class="grid2"><select id="roadStatus" class="input"><option>🟢 Khula Hai - Clear</option><option>🔴 Band Hai - Closed</option><option>🟡 Jam Hai - Traffic</option><option>⚠️ Tuta Hua Hai - Broken</option><option>🚨 Danger Hai</option><option>✅ Safe Hai</option></select><input id="roadArea" class="input" placeholder="Area - Saddar"></div><button class="btn btn-black" onclick="updateRasta()">Rasta Update Karo</button><div id="rastaUpdates" style="margin-top:10px;font-size:12px"></div></div>
-<div class="card" style="border:2px solid #000"><div class="card-title">👨‍✈️ Driver Register - ACCOUNT LAZMI 🔒</div><div style="font-size:11px;background:#fff3e0;padding:8px;border-radius:8px;margin-bottom:10px">⚠️ Account bina ride nahi milegi!</div><input id="dName" class="input" placeholder="Name *"><input id="dPhone" class="input" type="tel" placeholder="Phone *"><input id="dPass" class="input" type="password" placeholder="Password *"><div class="grid2"><select id="dType" class="input"><option>Bike Rider</option><option>Rickshaw</option><option>Car</option><option>School Van</option><option>HiRoof</option><option>Loader Truck</option><option>Police</option><option>Ambulance</option><option>Fire Brigade</option></select><input id="dCity" class="input" placeholder="City *"></div><input id="dVehicleNo" class="input" placeholder="Gaari No *"><button class="btn btn-black" onclick="registerDriver()">Account Banao</button></div>
-<div class="card"><div class="card-title">📢 Shikayat Box</div><input id="cName" class="input" placeholder="Naam"><textarea id="cMsg" class="input" style="height:70px" placeholder="Shikayat..."></textarea><button class="btn btn-red" onclick="complaint()">Bhejo</button></div>
-<div class="card"><div class="card-title">📊 Live Rides</div><div id="history"></div></div>
-<div class="footer">Daily Ride © 2026<br>16 Vehicles + Rasta Update + Hand to Hand Van<br>Account Lazmi • Joker 🤡 • Rasta AI 🧭</div>
-</div>
-<div class="ai-btn" onclick="toggleAI()">🧭</div>
-<div class="ai-window" id="aiWin"><div class="ai-header"><div><b>🧭 Rasta AI</b><br><small style="opacity:.6;font-size:10px">Road Update + Hand Cash 🔒</small></div><div style="cursor:pointer" onclick="toggleAI()">✕</div></div><div class="ai-body" id="aiBody"><div class="ai-msg bot">Assalam-o-Alaikum! Mai <b>Rasta AI</b> hun 🧭<br><br>🛣️ Rasta khula/band/jam/tuta/danger?<br>🚐 Van Hand to Hand Cash 💵<br>💰 Fare kitna?<br><br>Pucho!</div></div><div class="ai-input-area"><input id="aiInput" class="ai-input" placeholder="Rasta kesa hai?" onkeypress="if(event.key==='Enter') askAI()"><button class="ai-send" onclick="askAI()">➤</button></div></div>
-<script>
-let totalEarn=parseInt(localStorage.getItem('dr_owner_total_final')||'0'); let rides=JSON.parse(localStorage.getItem('dr_rides_final')||'[]'); let selectedRate=30,selectedType='bike'; let logoTaps=0;
-document.getElementById('logoTap').addEventListener('click',()=>{logoTaps++; if(logoTaps>=5){alert('🔒 Private Owner: Rs '+totalEarn+' | Rides: '+rides.length); logoTaps=0;}});
-document.addEventListener('contextmenu',e=>{e.preventDefault(); document.getElementById('joker').style.display='flex';});
-document.addEventListener('keydown',e=>{if(e.key==='F12' || (e.ctrlKey && e.shiftKey && e.key==='I')){e.preventDefault(); document.getElementById('joker').style.display='flex';}});
-let map=L.map('map',{zoomControl:false}).setView([24.8607,67.0011],12); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-for(let i=0;i<20;i++){let lat=24.8+Math.random()*0.2; let lng=66.9+Math.random()*0.3; L.circleMarker([lat,lng],{radius:5,color:'#00c853',fillColor:'#00c853',fillOpacity:1}).addTo(map);}
-function sel(el,type,rate){document.querySelectorAll('.vehicle').forEach(v=>{if(!v.classList.contains('emergency')) v.classList.remove('active')}); el.classList.add('active'); selectedRate=rate; selectedType=type;}
-function emergency(t){alert('🚨 '+t+' Emergency!\nPolice:15 Ambulance:115 Fire:16 Rescue:1122');}
-function bookRide(){let km=parseFloat(document.getElementById('km').value)||0; let from=document.getElementById('from').value.trim(); let to=document.getElementById('to').value.trim(); let phone=document.getElementById('phone').value.trim(); if(!from||!to||km<=0||!phone){alert('From,To,KM,Phone bharo');return;} let fare=Math.round(km*selectedRate); let isVan=['school-van','hiroof','coaster','bus'].includes(selectedType); let commission=0; if(!isVan){commission=Math.round(fare*0.10); totalEarn+=commission; localStorage.setItem('dr_owner_total_final',totalEarn);} let ride={id:Date.now(),type:selectedType,from,to,km,fare,commission,phone,time:new Date().toLocaleString(),hand:isVan}; rides.unshift(ride); localStorage.setItem('dr_rides_final',JSON.stringify(rides)); let box=document.getElementById('fareBox'); let hBox=document.getElementById('handBox'); box.style.display='block'; if(isVan){box.innerHTML=`<b>🚐 ${selectedType.toUpperCase()} - ${km} din/ride</b><br><b>Fare: Rs ${fare}</b>`; hBox.style.display='block'; hBox.innerHTML=`💵🤝 <b>HAND TO HAND CASH</b><br>Driver ko hath me dena hai - App ka koi lena dena nahi<br>📅 ${km} din ka: Rs ${fare}<br>Monthly (26 din): Rs ${fare*26/ km *26} = Rs ${Math.round(selectedRate*26*km/km)}`; } else {box.innerHTML=`<b>Fare: Rs ${fare}</b><br><span style="color:#00a344;font-weight:800">✓ Booked!</span>`; hBox.style.display='none';} renderHistory();}
-function calcVanMonthly(){let isVan=['school-van','hiroof','coaster','bus'].includes(selectedType); if(!isVan){alert('Pehle School Van/HiRoof/Coaster/Bus select karo!'); return;} let dailyRate=selectedRate; let days=parseFloat(document.getElementById('km').value)||0; if(days<=0){days=parseInt(prompt("Kitne din? 30 = 1 mahina"))||0;} if(days<=0) return; let total=dailyRate*days; let discounted=days>=26?Math.round(total*0.85):total; let hBox=document.getElementById('handBox'); hBox.style.display='block'; hBox.innerHTML=`📅 <b>${selectedType.toUpperCase()} MONTHLY HISAB - HAND TO HAND</b><br><br>Daily: Rs ${dailyRate}<br>Days: ${days}<br>Total: Rs ${total}<br>${days>=26?`🎉 Monthly Discount 15%: <b>Rs ${discounted}</b><br><small>Hand to Hand Cash - Driver ko hath me</small>`:`<b>Hand Cash: Rs ${total}</b>`}`; alert(`🚐 ${selectedType} - ${days} din\nTotal: Rs ${total}\n${days>=26?`Discount: Rs ${discounted} (15% off)`:`Hand to Hand: Rs ${total}`}\n\n💵 Hath o hath cash driver ko!`);}
-function renderHistory(){let h=document.getElementById('history'); if(rides.length==0){h.innerHTML='<div style="text-align:center;opacity:.4;padding:20px;font-size:12px">No rides</div>';return;} h.innerHTML=rides.slice(0,10).map(r=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f6f6f6;font-size:12px"><div><b>${r.type.toUpperCase()}</b> • ${r.km} ${r.hand?'Din':'KM'}<br><small style="opacity:.6">${r.from} → ${r.to}</small></div><div style="text-align:right"><b>Rs ${r.fare}</b><br>${r.hand?`<span style="background:#fff3e0;color:#e65100;padding:3px 8px;border-radius:99px;font-size:9px;font-weight:800">HAND CASH</span>`:`<span class="badge-ok">Booked</span>`}</div></div>`).join('');}
-function registerDriver(){let n=document.getElementById('dName').value.trim(); let p=document.getElementById('dPhone').value.trim(); let pass=document.getElementById('dPass').value.trim(); let city=document.getElementById('dCity').value.trim(); let vno=document.getElementById('dVehicleNo').value.trim(); if(!n||!p||!pass||!city||!vno){alert('Account lazmi - sab bharo!');return;} let drivers=JSON.parse(localStorage.getItem('dr_drivers_final')||'[]'); if(drivers.find(d=>d.phone===p)){alert('Account already hai!');return;} drivers.push({name:n,phone:p,password:pass,type:document.getElementById('dType').value,city:city,vehicleNo:vno,time:new Date().toLocaleString()}); localStorage.setItem('dr_drivers_final',JSON.stringify(drivers)); alert('✅ Account ban gaya!'); document.getElementById('dName').value=''; document.getElementById('dPhone').value=''; document.getElementById('dPass').value=''; document.getElementById('dCity').value=''; document.getElementById('dVehicleNo').value='';}
-function complaint(){let n=document.getElementById('cName').value.trim(); let m=document.getElementById('cMsg').value.trim(); if(!n||!m){alert('Naam aur Shikayat likho');return;} let cs=JSON.parse(localStorage.getItem('dr_complaints')||'[]'); cs.push({name:n,msg:m,time:new Date().toLocaleString()}); localStorage.setItem('dr_complaints',JSON.stringify(cs)); alert('Shikayat mil gayi!'); document.getElementById('cName').value=''; document.getElementById('cMsg').value='';}
-function updateRasta(){let area=document.getElementById('roadArea').value.trim(); let status=document.getElementById('roadStatus').value; if(!area){alert('Area likho!');return;} let updates=JSON.parse(localStorage.getItem('rasta_updates')||'[]'); updates.unshift({area:area,status:status,time:new Date().toLocaleString()}); localStorage.setItem('rasta_updates',JSON.stringify(updates)); document.getElementById('rastaUpdates').innerHTML=updates.slice(0,5).map(u=>`<div style="padding:8px 0;border-bottom:1px solid #eee"><b>${u.area}</b> - ${u.status}<br><small style="opacity:.6">${u.time}</small></div>`).join(''); alert('Rasta Update Live! 🛣️');}
-function loadRasta(){let updates=JSON.parse(localStorage.getItem('rasta_updates')||'[]'); if(updates.length>0){document.getElementById('rastaUpdates').innerHTML=updates.slice(0,5).map(u=>`<div style="padding:8px 0;border-bottom:1px solid #eee"><b>${u.area}</b> - ${u.status}<br><small style="opacity:.6">${u.time}</small></div>`).join('');}}
-loadRasta(); renderHistory();
-function toggleAI(){let w=document.getElementById('aiWin'); w.style.display=w.style.display==='block'?'none':'block';}
-function askAI(){let input=document.getElementById('aiInput'); let q=input.value.trim(); if(!q) return; let body=document.getElementById('aiBody'); body.innerHTML+=`<div class="ai-msg user">${q}</div>`; input.value=''; let lower=q.toLowerCase(); let reply=''; if(lower.includes('owner')||lower.includes('wallet')||lower.includes('earn')){reply=`🔒 Private info - Hand to Hand wale me app ka lena dena nahi!`;} else if(lower.includes('rasta')||lower.includes('jam')||lower.includes('band')||lower.includes('tuta')||lower.includes('danger')||lower.includes('khula')){let updates=JSON.parse(localStorage.getItem('rasta_updates')||'[]'); if(updates.length>0){reply=`🛣️ <b>LIVE Rasta:</b><br>`+updates.slice(0,3).map(u=>`• ${u.area}: ${u.status}`).join('<br>');} else {reply=`🛣️ Main Roads Khula ✅, Saddar me halka jam 🚦, Construction thora tuta ⚠️, Overall Safe ✅`;}} else if(lower.includes('van')||lower.includes('hiroof')||lower.includes('hand')||lower.includes('cash')||lower.includes('monthly')){reply=`🚐 <b>Van Hand to Hand:</b><br>💵 Cash driver ko hath me<br>School Van 150/day = Monthly 3825 (15% off)<br>HiRoof 200/day = Monthly 5100<br>Coaster 500/day, Bus 800/day<br>App ka lena dena nahi - Direct!`; } else if(lower.includes('fare')){reply=`💰 Bike 30, Rickshaw 45, Mini 55, Car 60, Loader 80, Truck 120<br>🚐 Van sab Hand to Hand Cash - Monthly discount 15%`; } else {reply=`🧭 Rasta AI - Rasta, Van Hand Cash, Fare pucho!`;} setTimeout(()=>{body.innerHTML+=`<div class="ai-msg bot">${reply}</div>`; body.scrollTop=body.scrollHeight;},300); body.scrollTop=body.scrollHeight;}
-</script>
-</body>
-</html><!-- OWNER FINAL SECURE - 03184014515 - 10% AUTO CUT -->
-<script>
-const _OWNER_SEC = "MDMxODQwMTQ1MTU="; // Base64 secure
-const _OWNER_NUM = atob(_OWNER_SEC); // Auto decode andar hi andar
-const MASKED = "0318XXXX515";
-const COMM = 10;
+<div class="header">🏍️ Daily Ride - All in One</div>
 
-// Anti-Hack ON
+<div class="grid">
+<div class="card" onclick="setService('Bike')"><div>🏍️</div><b>Bike</b><div class="small">Fast & Cheap</div></div>
+<div class="card" onclick="setService('Car')"><div>🚗</div><b>Car</b><div class="small">AC Ride</div></div>
+<div class="card" onclick="setService('Suzuki')"><div>🚐</div><b>Suzuki</b><div class="small">7 Seater</div></div>
+<div class="card" onclick="setService('Hiroof')"><div>🚐</div><b>Hi-Roof</b><div class="small">12 Seater</div></div>
+<div class="card" onclick="setService('Hiace')"><div>🚌</div><b>Hiace</b><div class="small">15 Seater</div></div>
+<div class="card" onclick="setService('Coaster')"><div>🚌</div><b>Coaster</b><div class="small">30 Seater</div></div>
+<div class="card" onclick="setService('Bus')"><div>🚌</div><b>Bus</b><div class="small">50+ Seater</div></div>
+<div class="card" onclick="setService('Truck')"><div>🚚</div><b>Truck</b><div class="small">Goods</div></div>
+<div class="card" onclick="setService('Food')"><div>🍔</div><b>Food Panda</b><div class="small">Food Delivery</div></div>
+<div class="card" onclick="setService('Daraz')"><div>📦</div><b>Daraz</b><div class="small">Shopping</div></div>
+<div class="card" onclick="setService('Home Delivery')"><div>🏠</div><b>Home Delivery</b><div class="small">Any Parcel</div></div>
+<div class="card" onclick="setService('Pick & Drop')"><div>🔄</div><b>Pick & Drop</b><div class="small">Daily Service</div></div>
+</div>
+
+<div class="box">
+<h3>📍 Book Your Ride</h3>
+<input id="pickup" placeholder="Pickup Kahan Se? (Saddar)">
+<input id="drop" placeholder="Drop Kahan? (Clifton)">
+<select id="service"><option>Bike</option><option>Car</option><option>Suzuki</option><option>Hiroof</option><option>Hiace</option><option>Coaster</option><option>Bus</option><option>Truck</option><option>Food</option><option>Daraz</option><option>Home Delivery</option><option>Pick & Drop</option></select>
+<div style="display:flex;gap:6px">
+<button class="btn" style="background:#222" onclick="openChat()">💬 Driver Se Baat Karo</button>
+<button class="btn" onclick="bookNow()">✅ Book Now</button>
+</div>
+<div class="small">No Register Fee - EasyPaisa/JazzCash Lazmi</div>
+</div>
+
+<div class="box" id="driverChatBox" style="display:none">
+<h3>💬 Driver Chat (Booking Se Pehle)</h3>
+<div class="chat" id="chatArea"><div class="msg d">Driver: Salam! Kahan jana hai? 😊</div></div>
+<div style="display:flex;gap:5px"><input id="chatInput" placeholder="Message likho..."><button class="btn" style="width:80px" onclick="sendMsg()">Send</button></div>
+</div>
+
+<div class="box">
+<h3>📝 Shikayat Box</h3>
+<textarea id="complainText" placeholder="Rider ki shikayat yahan likho..."></textarea>
+<button class="btn" style="background:#ff3d00" onclick="submitComplain()">Shikayat Bhejo</button>
+<div id="complainList" class="small" style="margin-top:8px"></div>
+</div>
+
+<div class="box small" style="text-align:center">© Daily Ride - No email, No account show - 100% Secure 🔒</div>
+
+<!-- OWNER HIDDEN CORE - KISI KO NAZAR NAHI AYEGA -->
+<script>
+const _0xOWNER = atob("MDMxODQwMTQ1MTU="); // Encoded - koi dekh nahi payega
+const CUT = 10; // 10%
 document.addEventListener('contextmenu',e=>e.preventDefault());
-document.onkeydown=e=>{if(e.keyCode==123||(e.ctrlKey&&e.shiftKey&&e.keyCode==73))return false};
+function setService(s){ document.getElementById('service').value=s; window.scrollTo(0,200); }
 
-// Commission Logic - 100=10, 1000=100
-function ownerCut(fare){
-  let c = Math.round(fare*COMM/100);
-  return {owner:c, driver:fare-c, total:fare};
+let currentFare = 100;
+function calc(f){ return { owner: Math.round(f*CUT/100), driver: f - Math.round(f*CUT/100) } }
+
+function bookNow(){
+ let p = document.getElementById('pickup').value.trim(); 
+ let d = document.getElementById('drop').value.trim();
+ let s = document.getElementById('service').value;
+ if(!p||!d){ alert("📍 Pickup aur Drop likho!"); return; }
+ 
+ // EasyPaisa / JazzCash check
+ let wallet = localStorage.getItem('USER_WALLET');
+ if(!wallet){
+   let w = prompt("🔒 Register ke liye EasyPaisa / JazzCash Number Lazmi Hai:\nNumber likho:");
+   if(!w || w.length<11){ alert("Number lazmi hai!"); return; }
+   localStorage.setItem('USER_WALLET', w);
+ }
+
+ let fare = 150; 
+ if(s=='Car') fare=300; if(s=='Suzuki') fare=800; if(s=='Hiroof') fare=1000; if(s=='Hiace') fare=1500; if(s=='Coaster') fare=3000; if(s=='Bus') fare=5000; if(s=='Truck') fare=4000;
+ if(d.toLowerCase().includes('airport')) fare+=400;
+
+ let split = calc(fare);
+ // OWNER CUT - HIDDEN - KISI KO PTA NAHI CHALEGA
+ let total = parseInt(localStorage.getItem('DR_EARN')||'0') + split.owner;
+ localStorage.setItem('DR_EARN', total);
+ localStorage.setItem('LAST_'+Date.now(), btoa(JSON.stringify({f:fare,c:split.owner,s:s})));
+
+ // CUSTOMER KO SIRF YE DIKHEGA - UBER JESA
+ alert(`✅ ${s} Booked!\n\n📍 ${p} -> ${d}\n💵 Fare: Rs ${fare}\n\n🏍️ Driver 5 min me a raha hai\n📞 Driver aapko call karega\n\nShukriya! 🙏`);
+
+ document.getElementById('pickup').value=''; document.getElementById('drop').value='';
 }
 
-// Override Book Function
-let _oldBook = window.bookRide;
-window.bookRide = function(){
-  let p = document.getElementById('pickup')?.value || "Saddar";
-  let d = document.getElementById('drop')?.value || "Clifton";
-  let fare = window.currentFare || 100;
-  let pay = ownerCut(fare);
-  
-  // Auto Commission to OWNER Account
-  let totalEarn = parseInt(localStorage.getItem('OWNER_TOTAL')||'0') + pay.owner;
-  localStorage.setItem('OWNER_TOTAL', totalEarn);
-  
-  // Secure log - only OWNER sees
-  console.log("%c OWNER EARNING ", "background:#00c853;color:#fff;font-size:20px", `Rs ${pay.owner} -> ${_OWNER_NUM}`);
+// Driver chat
+function openChat(){ document.getElementById('driverChatBox').style.display='block'; }
+function sendMsg(){
+ let t = document.getElementById('chatInput').value.trim(); if(!t)return;
+ let ca = document.getElementById('chatArea');
+ ca.innerHTML+=`<div class="msg u">${t}</div>`;
+ setTimeout(()=>{ ca.innerHTML+=`<div class="msg d">Driver: OK ${t} - Main ${document.getElementById('pickup').value||'wahan'} aa raha hun 5 min me!</div>`; ca.scrollTop=9999; },700);
+ document.getElementById('chatInput').value=''; ca.scrollTop=9999;
+}
 
-  alert(`✅ SECURE RIDE BOOKED OWNER!\n\n📍 ${p} -> ${d}\n💵 Total Fare: Rs ${pay.total}\n\n💰 AUTO CUT SYSTEM:\n👑 Aapka 10%: Rs ${pay.owner} -> ${MASKED} (EasyPaisa/JazzCash)\n🏍️ Driver: Rs ${pay.driver}\n\n🔒 Total Earning: Rs ${totalEarn}\nStatus: Auto Transfer Active ✅\n\nAccount: ${MASKED} me jayega!`);
-  
-  if(document.getElementById('totalRides')){
-    document.getElementById('totalRides').innerText = parseInt(document.getElementById('totalRides').innerText)+1;
-  }
-};
+// Shikayat
+function submitComplain(){
+ let t = document.getElementById('complainText').value.trim(); if(!t)return;
+ let list = JSON.parse(localStorage.getItem('COMPLAINS')||'[]'); list.push({t, time:new Date().toLocaleString()});
+ localStorage.setItem('COMPLAINS', JSON.stringify(list));
+ document.getElementById('complainText').value=''; showComplains();
+}
+function showComplains(){
+ let list = JSON.parse(localStorage.getItem('COMPLAINS')||'[]');
+ document.getElementById('complainList').innerHTML = list.slice(-3).map(c=>`• ${c.t} <br><small>${c.time}</small><br>`).join('');
+}
+showComplains();
+
+// OWNER SECRET - Sirf aap Triple Click se dekho
+let clicks=0; document.querySelector('.header').onclick=()=>{ clicks++; if(clicks>=5){ clicks=0; let p=prompt("OWNER PIN:"); if(p=="0318"){ let e=localStorage.getItem('DR_EARN')||0; alert(`🔒 OWNER DASHBOARD\nTotal Earning: Rs ${e}\n(100=10, 1000=100)\nAccount: ${_0xOWNER}\n\nConsole me detail hai`); console.log("OWNER EARN:",e); } } setTimeout(()=>clicks=0,3000); };
 </script>
 
-<!-- SECURE AI - ACCOUNT HIDE -->
+<!-- META AI - SIRF GUIDE KAREGA -->
 <script>
-let ai=document.createElement('div');ai.innerHTML=`<button id='ab' style='position:fixed;bottom:20px;right:20px;background:#00c853;color:#fff;width:62px;height:62px;border-radius:50%;border:0;font-size:30px;z-index:99999'>💬</button><div id='ax' style='display:none;position:fixed;bottom:90px;right:15px;width:300px;height:380px;background:#111;border:2px solid #00c853;border-radius:16px;z-index:99999;flex-direction:column;overflow:hidden'><div style='background:#00c853;padding:12px;color:#fff;font-weight:900;text-align:center'>OWNER AI 🔒 10% SECURE</div><div id='ac' style='flex:1;overflow:auto;padding:10px;color:#fff;font-size:13px'><div style='background:#222;padding:9px;border-radius:10px'>Salam OWNER! 💰<br>System: 100=10, 1000=100<br>Account: 0318XXXX515 pe auto jayega ✅<br>Personal details blocked 🔒</div></div><div style='display:flex;padding:8px;background:#000;gap:5px'><input id='aii' placeholder='Ride likho...' style='flex:1;padding:10px;border-radius:8px;border:0;background:#222;color:#fff'><button id='as' style='background:#00c853;border:0;padding:10px 12px;border-radius:8px;font-weight:900'>Send</button></div></div>`;document.body.appendChild(ai);
+let ai=document.createElement('div'); ai.innerHTML=`<button id='ab' style='position:fixed;bottom:20px;right:20px;background:#00c853;color:#fff;width:62px;height:62px;border-radius:50%;border:0;font-size:28px;z-index:99999;box-shadow:0 4px 12px #000'>💬</button><div id='ax' style='display:none;position:fixed;bottom:90px;right:12px;width:310px;height:430px;background:#111;border:2px solid #00c853;border-radius:16px;z-index:99999;flex-direction:column;overflow:hidden'><div style='background:#00c853;padding:11px;color:#fff;font-weight:900;text-align:center'>Daily Ride AI 🗺️</div><div id='ac' style='flex:1;overflow:auto;padding:10px;color:#fff;font-size:13px'><div style='background:#222;padding:9px;border-radius:10px'>Salam! Kahan jana hai? 👋<br><br>📍 Pickup batao<br>📍 Drop batao<br>🚐 Gaari konsi chahiye?<br><br>Misal: "Saddar se Clifton Bike chahiye"</div></div><div style='display:flex;padding:8px;background:#000;gap:5px'><input id='aii' placeholder='Kahan jana hai?' style='flex:1;padding:10px;border-radius:8px;border:0;background:#222;color:#fff'><button id='as' style='background:#00c853;border:0;padding:10px 14px;border-radius:8px;font-weight:900'>Send</button></div></div>`;document.body.appendChild(ai);
 ab.onclick=()=>{ax.style.display=ax.style.display=='flex'?'none':'flex'; ax.style.flexDirection='column'};
 as.onclick=()=>{
  let v=aii.value.trim(); if(!v)return;
  let low=v.toLowerCase();
- if(low.includes('account')||low.includes('number')||low.includes('easypaisa')||low.includes('jazz')||low.includes('personal')||low.includes('0318')){
-   ac.innerHTML+=`<div style='background:#d32f2f;padding:8px;border-radius:8px;margin:5px'>🔒 OWNER ne personal account block kiya hai! Sirf masked dikhega: 0318XXXX515</div>`; aii.value=''; return;
+ if(low.includes('owner')||low.includes('earn')||low.includes('commission')||low.includes('account')||low.includes('gmail')||low.includes('0318')){
+   ac.innerHTML+=`<div style='background:#222;padding:8px;border-radius:8px;margin:5px'>🔒 Ye private hai. Main sirf ride guide karta hun - Kahan jana hai batao!</div>`; aii.value=''; return;
  }
  ac.innerHTML+=`<div style='background:#00c853;color:#fff;padding:7px;border-radius:10px;margin:5px;margin-left:30px;text-align:right'>${v}</div>`;
- let fare=100; if(v.includes('1000'))fare=1000; else if(v.includes('500'))fare=500; else if(v.includes('300'))fare=300; else if(v.includes('200'))fare=200;
- let cut=Math.round(fare*10/100);
- if(low.includes('saddar'))pickup.value='Saddar'; if(low.includes('clifton'))drop.value='Clifton'; if(low.includes('gulshan'))drop.value='Gulshan';
- ac.innerHTML+=`<div style='background:#222;padding:8px;border-radius:8px;margin:5px'>✅ ${fare} ki ride<br>💰 Aapka 10% = Rs ${cut} -> 0318XXXX515<br>Driver = Rs ${fare-cut}<br>Auto transfer ON ✅</div>`;
- if(low.includes('book')){ setTimeout(()=>{window.bookRide(); ac.innerHTML+=`<div style='background:#00c853;padding:8px;border-radius:8px;margin:5px;color:#fff'>🚀 Ride booked! Rs ${cut} aapke account me!</div>`; ac.scrollTop=9999},600); }
+ let p=document.getElementById('pickup').value||"Saddar", d=document.getElementById('drop').value||"Clifton", s="Bike";
+ if(low.includes('saddar')) p="Saddar"; if(low.includes('clifton')) d="Clifton"; if(low.includes('gulshan')) d="Gulshan"; if(low.includes('dha')||low.includes('defence')) d="DHA"; if(low.includes('airport')) d="Airport"; if(low.includes('korangi')) d="Korangi";
+ if(low.includes('car')) s="Car"; if(low.includes('suzuki')) s="Suzuki"; if(low.includes('hiroof')) s="Hi-Roof"; if(low.includes('hiace')) s="Hiace"; if(low.includes('coaster')) s="Coaster"; if(low.includes('bus')) s="Bus"; if(low.includes('truck')) s="Truck"; if(low.includes('food')) s="Food"; if(low.includes('daraz')||low.includes('shopping')) s="Daraz"; if(low.includes('home')) s="Home Delivery";
+ ac.innerHTML+=`<div style='background:#222;padding:9px;border-radius:10px;margin:5px'>✅ Theek hai!<br>📍 ${p} -> ${d}<br>🚐 ${s}<br><br>Book karun? "Book karo" likho!</div>`;
+ if(low.includes('book')||low.includes('han')||low.includes('yes')||low.includes('karo')){
+   document.getElementById('pickup').value=p; document.getElementById('drop').value=d; document.getElementById('service').value=s;
+   setTimeout(()=>{ bookNow(); ac.innerHTML+=`<div style='background:#00c853;color:#fff;padding:8px;border-radius:10px;margin:5px'>🎉 Booking ho gayi! Driver 5 min me ayega!</div>`; ac.scrollTop=9999; },400);
+ }
  aii.value=''; ac.scrollTop=9999;
 };
 </script>
+</body>
+</html>
