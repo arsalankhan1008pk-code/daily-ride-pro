@@ -2,157 +2,114 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Daily Ride - Pakistan No.1 Super App</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system}
-body{background:#f3f4f6;color:#111;-webkit-tap-highlight-color:transparent}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#f3f4f6}
 .header{background:#000;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-.logo{font-size:22px;font-weight:900;letter-spacing:-0.5px}
-.live{background:#00c853;color:#fff;padding:6px 14px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.5px}
-.container{max-width:480px;margin:0 auto;padding-bottom:40px}
+.logo{font-size:22px;font-weight:900;cursor:pointer}
+.live{background:#00c853;color:#fff;padding:6px 14px;border-radius:99px;font-size:11px;font-weight:800}
+.container{max-width:480px;margin:0 auto;padding-bottom:90px}
 .card{background:#fff;margin:12px;border-radius:20px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.06);border:1px solid #f1f1f1}
-.card-title{font-size:16px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.wallet{background:linear-gradient(135deg,#000 0%,#1a1a1a 50%,#2d2d2d 100%);color:#fff;border-radius:16px;padding:20px;position:relative;overflow:hidden}
-.wallet::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,200,83,.25),transparent);border-radius:50%}
-.wallet small{opacity:.6;font-size:10px;letter-spacing:1.5px;font-weight:700}
-.wallet h1{font-size:36px;margin:8px 0;font-weight:900;letter-spacing:-1px}
-.wallet .sec{font-size:11px;background:rgba(255,255,255,.12);padding:6px 12px;border-radius:99px;display:inline-flex;gap:6px;align-items:center;margin-top:10px;backdrop-filter:blur(10px)}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
-.stat{background:rgba(255,255,255,.08);padding:12px;border-radius:12px;text-align:center;border:1px solid rgba(255,255,255,.05)}
-.stat b{display:block;font-size:17px;font-weight:800}
-.stat span{font-size:9px;opacity:.6;letter-spacing:.5px;font-weight:700;margin-top:2px;display:block}
+.card-title{font-size:16px;font-weight:800;margin-bottom:12px}
+.map-box{height:260px;border-radius:16px;overflow:hidden;border:2px solid #000}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.input{width:100%;padding:15px 14px;border:1.8px solid #e5e7eb;border-radius:12px;font-size:15px;font-weight:600;background:#fafafa;margin:6px 0;transition:.2s}
-.input:focus{border-color:#000;background:#fff;outline:none;box-shadow:0 0 0 3px rgba(0,0,0,.05)}
-.vehicle{border:2px solid #eee;border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:.2s;background:#fff}
-.vehicle.active{border-color:#000;background:#000;color:#fff;transform:scale(1.02);box-shadow:0 6px 18px rgba(0,0,0,.2)}
-.vehicle .icon{font-size:24px}
-.vehicle b{display:block;font-size:13px;margin-top:6px;font-weight:800}
-.vehicle span{font-size:11px;opacity:.7;font-weight:600}
-.btn{width:100%;padding:16px;border:0;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;transition:.2s;letter-spacing:.2px}
-.btn:active{transform:scale(.97)}
-.btn-green{background:#00c853;color:#fff;box-shadow:0 8px 20px rgba(0,200,83,.35)}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.input{width:100%;padding:14px;border:1.8px solid #e5e7eb;border-radius:12px;font-size:14px;font-weight:600;background:#fafafa;margin:6px 0}
+.vehicle{border:2px solid #eee;border-radius:14px;padding:10px 4px;text-align:center;cursor:pointer;background:#fff}
+.vehicle.active{border-color:#000;background:#000;color:#fff;transform:scale(1.03)}
+.vehicle b{font-size:10px;display:block;margin-top:4px}
+.vehicle span{font-size:8px;opacity:.7}
+.btn{width:100%;padding:16px;border:0;border-radius:14px;font-weight:800;font-size:15px;cursor:pointer}
+.btn-green{background:#00c853;color:#fff}
 .btn-black{background:#000;color:#fff}
-.fare-box{background:#f0fdf4;border:1.5px dashed #00c853;border-radius:14px;padding:14px;text-align:center;margin-top:14px;display:none;line-height:1.6}
-.history-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f6f6f6;font-size:13px}
-.history-item:last-child{border:0}
-.badge{padding:4px 10px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:.3px}
-.badge-ok{background:#e8f5e9;color:#00a344}
-.badge-live{background:#000;color:#fff}
+.btn-red{background:#d32f2f;color:#fff}
+.fare-box{background:#f0fdf4;border:1.5px dashed #00c853;border-radius:14px;padding:12px;text-align:center;margin-top:12px;display:none}
 .dot{width:8px;height:8px;background:#00c853;border-radius:50%;display:inline-block;animation:blink 1.5s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.empty{text-align:center;opacity:.4;padding:24px;font-size:13px;font-weight:600}
+.joker-screen{position:fixed;inset:0;background:#000;color:#fff;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.service{border:1.5px solid #eee;border-radius:14px;padding:12px;text-align:center;background:#fff;cursor:pointer}
+.badge-ok{background:#e8f5e9;color:#00a344;padding:4px 10px;border-radius:99px;font-size:10px;font-weight:800}
+.emergency{border:1.5px solid #ffcdd2;background:#ffebee}
+.ai-btn{position:fixed;bottom:20px;right:20px;background:#000;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 8px 24px rgba(0,0,0,.3);cursor:pointer;z-index:999;border:2px solid #00c853}
+.ai-window{position:fixed;bottom:90px;right:12px;left:12px;max-width:460px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.25);border:1px solid #e5e7eb;z-index:999;display:none;overflow:hidden}
+.ai-header{background:#000;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.ai-body{height:300px;overflow-y:auto;padding:14px;background:#f9fafb}
+.ai-msg{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.5;max-width:85%}
+.ai-msg.bot{background:#fff;border:1px solid #eee}
+.ai-msg.user{background:#000;color:#fff;margin-left:auto}
+.ai-input-area{display:flex;gap:8px;padding:12px;border-top:1px solid #eee;background:#fff}
+.ai-input{flex:1;padding:12px 14px;border:1.5px solid #e5e7eb;border-radius:99px;font-size:13px;font-weight:600}
+.ai-send{background:#00c853;color:#fff;border:0;padding:0 18px;border-radius:99px;font-weight:800;cursor:pointer}
 .footer{margin:18px 12px;text-align:center;font-size:11px;opacity:.45;line-height:1.5;font-weight:600}
+.hand-box{background:#fff8e1;border:1.5px dashed #ff9800;border-radius:12px;padding:10px;text-align:center;margin-top:8px;font-size:12px;font-weight:700}
 </style>
 </head>
 <body>
-<div class="header">
-<div class="logo">Daily Ride</div>
-<div class="live"><span class="dot"></span> UBER SYSTEM ON</div>
-</div>
+<div class="joker-screen" id="joker"><h1 style="font-size:80px">🤡</h1><h2>HACK DETECTED!</h2><p style="opacity:.7;margin-top:8px">Joker + Rasta AI Active 🔒</p><p style="margin-top:20px;background:#fff;color:#000;padding:10px 20px;border-radius:99px;font-weight:800;cursor:pointer" onclick="document.getElementById('joker').style.display='none'">Go Back</p></div>
+<div class="header"><div class="logo" id="logoTap">Daily Ride</div><div class="live"><span class="dot"></span> SUPER APP LIVE</div></div>
 <div class="container">
-
-<div class="card" style="background:transparent;box-shadow:none;padding:0 12px;border:0;margin-top:12px">
-<div class="wallet">
-<small>OWNER COMMISSION WALLET</small>
-<h1 id="earnRs">Rs 0</h1>
-<div class="sec">🔒 Secured Private Wallet • Owner Only</div>
-<div class="stats">
-<div class="stat"><b id="tRides">0</b><span>TOTAL RIDES</span></div>
-<div class="stat"><b>10%</b><span>COMMISSION</span></div>
-<div class="stat"><b style="color:#4ade80">LIVE</b><span>STATUS</span></div>
+<div class="card" style="padding:0;overflow:hidden"><div class="map-box" id="map"></div><div style="padding:10px;display:flex;gap:6px;overflow-x:auto"><span style="background:#e8f5e9;color:#00a344;padding:6px 12px;border-radius:99px;font-size:10px;font-weight:700">🟢 312 Live - 3D HD</span><span style="background:#000;color:#fff;padding:6px 12px;border-radius:99px;font-size:10px;font-weight:700">📍 Karachi</span></div></div>
+<div class="card"><div class="card-title">🌟 Super Services</div><div class="grid4"><div class="service" onclick="document.getElementById('rideSec').scrollIntoView({behavior:'smooth'})"><div>🏍️</div><b>Ride</b></div><div class="service"><div>🍔</div><b>Food</b></div><div class="service"><div>📦</div><b>Parcel</b></div><div class="service"><div>🛒</div><b>Mart</b></div></div></div>
+<div class="card" id="rideSec"><div class="card-title">🚗 All Vehicles - 16 Total</div>
+<div style="font-size:11px;opacity:.6;margin-bottom:8px;font-weight:700">NORMAL - 10% Commission Hidden:</div><div class="grid4">
+<div class="vehicle active" onclick="sel(this,'bike',30)"><div>🏍️</div><b>Bike</b><span>30/km</span></div>
+<div class="vehicle" onclick="sel(this,'rickshaw',45)"><div>🛺</div><b>Rickshaw</b><span>45/km</span></div>
+<div class="vehicle" onclick="sel(this,'mini',55)"><div>🚕</div><b>Mini</b><span>55/km</span></div>
+<div class="vehicle" onclick="sel(this,'ac',60)"><div>🚗</div><b>AC</b><span>60/km</span></div>
+<div class="vehicle" onclick="sel(this,'premium',90)"><div>🚙</div><b>Premium</b><span>90/km</span></div>
+<div class="vehicle" onclick="sel(this,'loader',80)"><div>🚚</div><b>Loader</b><span>80/km</span></div>
+<div class="vehicle" onclick="sel(this,'truck',120)"><div>🚛</div><b>Truck</b><span>120/km</span></div>
+<div class="vehicle" onclick="sel(this,'auto',50)"><div>🛺</div><b>Auto</b><span>50/km</span></div>
 </div>
+<div style="font-size:11px;opacity:.6;margin:12px 0 8px;font-weight:700">🏫 SCHOOL & HIROOF - HAND TO HAND CASH 💵🤝:</div><div class="grid4">
+<div class="vehicle" onclick="sel(this,'school-van',150)"><div>🚐</div><b>School Van</b><span>Hand Cash</span></div>
+<div class="vehicle" onclick="sel(this,'hiroof',200)"><div>🚐</div><b>HiRoof</b><span>Hand Cash</span></div>
+<div class="vehicle" onclick="sel(this,'coaster',500)"><div>🚌</div><b>Coaster</b><span>Hand Cash</span></div>
+<div class="vehicle" onclick="sel(this,'bus',800)"><div>🚌</div><b>Bus</b><span>Hand Cash</span></div>
 </div>
+<div style="font-size:11px;color:#d32f2f;margin:12px 0 8px;font-weight:800">🚨 EMERGENCY:</div><div class="grid4">
+<div class="vehicle emergency" onclick="emergency('Police')"><div>🚓</div><b>Police</b><span>15</span></div>
+<div class="vehicle emergency" onclick="emergency('Ambulance')"><div>🚑</div><b>Ambulance</b><span>115</span></div>
+<div class="vehicle emergency" onclick="emergency('Fire')"><div>🚒</div><b>Fire</b><span>16</span></div>
+<div class="vehicle emergency" onclick="emergency('Rescue')"><div>🚨</div><b>Rescue</b><span>1122</span></div>
 </div>
-
-<div class="card">
-<div class="card-title">🏍️ Book Your Ride - All Pakistan</div>
-<div class="grid2">
-<div class="vehicle active" onclick="sel(this,'bike',30)"><div class="icon">🏍️</div><b>Bike</b><span>Rs 30/km</span></div>
-<div class="vehicle" onclick="sel(this,'rickshaw',45)"><div class="icon">🛺</div><b>Rickshaw</b><span>Rs 45/km</span></div>
-<div class="vehicle" onclick="sel(this,'car',60)"><div class="icon">🚗</div><b>Car</b><span>Rs 60/km</span></div>
-<div class="vehicle" onclick="sel(this,'loader',80)"><div class="icon">🚚</div><b>Loader</b><span>Rs 80/km</span></div>
-</div>
-<input id="from" class="input" placeholder="📍 From - e.g Clifton, Karachi">
-<input id="to" class="input" placeholder="📍 To - e.g Saddar, Karachi">
-<div class="grid2">
-<input id="km" class="input" type="number" placeholder="KM - e.g 5">
-<input id="phone" class="input" type="tel" placeholder="Your Phone">
-</div>
-<button class="btn btn-green" onclick="bookRide()">Book Ride Now - Cash Payment</button>
+<input id="from" class="input" placeholder="📍 From"><input id="to" class="input" placeholder="📍 To"><div class="grid2"><input id="km" class="input" type="number" placeholder="KM / Days"><input id="phone" class="input" type="tel" placeholder="Phone"></div>
+<button class="btn btn-green" onclick="bookRide()">Book Now</button>
+<button class="btn btn-black" style="margin-top:8px;background:#333" onclick="calcVanMonthly()">📅 Van Monthly Hisab - Hand to Hand</button>
 <div id="fareBox" class="fare-box"></div>
+<div id="handBox" class="hand-box" style="display:none"></div>
 </div>
-
-<div class="card">
-<div class="card-title">👨‍✈️ Become Driver - Daily Earning</div>
-<input id="dName" class="input" placeholder="Full Name">
-<input id="dPhone" class="input" type="tel" placeholder="Phone - e.g 0300xxxxxxx">
-<div class="grid2">
-<select id="dType" class="input"><option>Bike Rider</option><option>Rickshaw Driver</option><option>Car Driver</option><option>Loader Driver</option></select>
-<input id="dCity" class="input" placeholder="City - e.g Karachi">
+<div class="card" style="border:2px dashed #000"><div class="card-title">🛣️ Rasta Condition - Khula/Band/Jam/Tuta/Danger</div><div class="grid2"><select id="roadStatus" class="input"><option>🟢 Khula Hai - Clear</option><option>🔴 Band Hai - Closed</option><option>🟡 Jam Hai - Traffic</option><option>⚠️ Tuta Hua Hai - Broken</option><option>🚨 Danger Hai</option><option>✅ Safe Hai</option></select><input id="roadArea" class="input" placeholder="Area - Saddar"></div><button class="btn btn-black" onclick="updateRasta()">Rasta Update Karo</button><div id="rastaUpdates" style="margin-top:10px;font-size:12px"></div></div>
+<div class="card" style="border:2px solid #000"><div class="card-title">👨‍✈️ Driver Register - ACCOUNT LAZMI 🔒</div><div style="font-size:11px;background:#fff3e0;padding:8px;border-radius:8px;margin-bottom:10px">⚠️ Account bina ride nahi milegi!</div><input id="dName" class="input" placeholder="Name *"><input id="dPhone" class="input" type="tel" placeholder="Phone *"><input id="dPass" class="input" type="password" placeholder="Password *"><div class="grid2"><select id="dType" class="input"><option>Bike Rider</option><option>Rickshaw</option><option>Car</option><option>School Van</option><option>HiRoof</option><option>Loader Truck</option><option>Police</option><option>Ambulance</option><option>Fire Brigade</option></select><input id="dCity" class="input" placeholder="City *"></div><input id="dVehicleNo" class="input" placeholder="Gaari No *"><button class="btn btn-black" onclick="registerDriver()">Account Banao</button></div>
+<div class="card"><div class="card-title">📢 Shikayat Box</div><input id="cName" class="input" placeholder="Naam"><textarea id="cMsg" class="input" style="height:70px" placeholder="Shikayat..."></textarea><button class="btn btn-red" onclick="complaint()">Bhejo</button></div>
+<div class="card"><div class="card-title">📊 Live Rides</div><div id="history"></div></div>
+<div class="footer">Daily Ride © 2026<br>16 Vehicles + Rasta Update + Hand to Hand Van<br>Account Lazmi • Joker 🤡 • Rasta AI 🧭</div>
 </div>
-<button class="btn btn-black" onclick="registerDriver()">Register as Driver</button>
-<p style="font-size:11px;opacity:.5;text-align:center;margin-top:10px;font-weight:600">Owner approval in 24 hours • Start daily earning</p>
-</div>
-
-<div class="card">
-<div class="card-title">📊 Recent Rides & Your Commission</div>
-<div id="history"><div class="empty">No rides yet - Book first ride now!</div></div>
-</div>
-
-<div class="footer">Daily Ride Super App © 2026<br>Pakistan's No.1 Ride App • Secure Owner System 🔒<br>Version FINAL PRO MAX • All Systems Live</div>
-</div>
-
+<div class="ai-btn" onclick="toggleAI()">🧭</div>
+<div class="ai-window" id="aiWin"><div class="ai-header"><div><b>🧭 Rasta AI</b><br><small style="opacity:.6;font-size:10px">Road Update + Hand Cash 🔒</small></div><div style="cursor:pointer" onclick="toggleAI()">✕</div></div><div class="ai-body" id="aiBody"><div class="ai-msg bot">Assalam-o-Alaikum! Mai <b>Rasta AI</b> hun 🧭<br><br>🛣️ Rasta khula/band/jam/tuta/danger?<br>🚐 Van Hand to Hand Cash 💵<br>💰 Fare kitna?<br><br>Pucho!</div></div><div class="ai-input-area"><input id="aiInput" class="ai-input" placeholder="Rasta kesa hai?" onkeypress="if(event.key==='Enter') askAI()"><button class="ai-send" onclick="askAI()">➤</button></div></div>
 <script>
-let selectedRate = 30;
-let selectedType = 'bike';
-let rides = JSON.parse(localStorage.getItem('dr_rides_final')||'[]');
-let totalEarn = parseInt(localStorage.getItem('dr_owner_total_final')||'0');
-document.getElementById('earnRs').innerText = 'Rs ' + totalEarn;
-document.getElementById('tRides').innerText = rides.length;
-function sel(el,type,rate){
-document.querySelectorAll('.vehicle').forEach(v=>v.classList.remove('active'));
-el.classList.add('active');
-selectedRate=rate;selectedType=type;
-}
-function bookRide(){
-let km=parseFloat(document.getElementById('km').value)||0;
-let from=document.getElementById('from').value.trim();
-let to=document.getElementById('to').value.trim();
-let phone=document.getElementById('phone').value.trim();
-if(!from||!to||km<=0||!phone){alert('Bhai! From, To, KM, Phone sab bharo');return;}
-let fare=Math.round(km*selectedRate);
-let commission=Math.round(fare*0.10);
-totalEarn+=commission;
-localStorage.setItem('dr_owner_total_final',totalEarn);
-document.getElementById('earnRs').innerText='Rs '+totalEarn;
-let ride={id:Date.now(),type:selectedType,from,to,km,fare,commission,phone,time:new Date().toLocaleString()};
-rides.unshift(ride);
-localStorage.setItem('dr_rides_final',JSON.stringify(rides));
-document.getElementById('tRides').innerText=rides.length;
-let box=document.getElementById('fareBox');
-box.style.display='block';
-box.innerHTML=`<b style="font-size:16px">Total Fare: Rs ${fare}</b><br><span style="color:#00a344;font-weight:800">✓ Your Commission Rs ${commission} Secured 🔒</span><br><small style="opacity:.7">${from} → ${to} • ${km}KM • ${selectedType} • ${phone}</small>`;
-renderHistory();
-window.scrollTo({top:box.offsetTop-20,behavior:'smooth'});
-}
-function renderHistory(){
-let h=document.getElementById('history');
-if(rides.length==0){h.innerHTML='<div class="empty">No rides yet - Book first ride now!</div>';return;}
-h.innerHTML=rides.slice(0,20).map(r=>`<div class="history-item"><div><b>${r.type.toUpperCase()}</b> • ${r.km}KM • <span class="badge badge-live">${r.phone.slice(-4)}</span><br><small style="opacity:.6">${r.from} → ${r.to}</small><br><small style="opacity:.4;font-size:10px">${r.time}</small></div><div style="text-align:right"><b>Rs ${r.fare}</b><br><span class="badge badge-ok">+Rs ${r.commission}</span></div></div>`).join('');
-}
-function registerDriver(){
-let n=document.getElementById('dName').value.trim();
-let p=document.getElementById('dPhone').value.trim();
-if(!n||!p){alert('Name aur Phone likho!');return;}
-let drivers=JSON.parse(localStorage.getItem('dr_drivers_final')||'[]');
-drivers.push({name:n,phone:p,type:document.getElementById('dType').value,city:document.getElementById('dCity').value,time:new Date().toLocaleString()});
-localStorage.setItem('dr_drivers_final',JSON.stringify(drivers));
-alert('✅ Driver '+n+' Registered!\nOwner will approve and contact you on '+p+' in 24 hours');
-document.getElementById('dName').value='';document.getElementById('dPhone').value='';document.getElementById('dCity').value='';
-}
-renderHistory();
+let totalEarn=parseInt(localStorage.getItem('dr_owner_total_final')||'0'); let rides=JSON.parse(localStorage.getItem('dr_rides_final')||'[]'); let selectedRate=30,selectedType='bike'; let logoTaps=0;
+document.getElementById('logoTap').addEventListener('click',()=>{logoTaps++; if(logoTaps>=5){alert('🔒 Private Owner: Rs '+totalEarn+' | Rides: '+rides.length); logoTaps=0;}});
+document.addEventListener('contextmenu',e=>{e.preventDefault(); document.getElementById('joker').style.display='flex';});
+document.addEventListener('keydown',e=>{if(e.key==='F12' || (e.ctrlKey && e.shiftKey && e.key==='I')){e.preventDefault(); document.getElementById('joker').style.display='flex';}});
+let map=L.map('map',{zoomControl:false}).setView([24.8607,67.0011],12); L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+for(let i=0;i<20;i++){let lat=24.8+Math.random()*0.2; let lng=66.9+Math.random()*0.3; L.circleMarker([lat,lng],{radius:5,color:'#00c853',fillColor:'#00c853',fillOpacity:1}).addTo(map);}
+function sel(el,type,rate){document.querySelectorAll('.vehicle').forEach(v=>{if(!v.classList.contains('emergency')) v.classList.remove('active')}); el.classList.add('active'); selectedRate=rate; selectedType=type;}
+function emergency(t){alert('🚨 '+t+' Emergency!\nPolice:15 Ambulance:115 Fire:16 Rescue:1122');}
+function bookRide(){let km=parseFloat(document.getElementById('km').value)||0; let from=document.getElementById('from').value.trim(); let to=document.getElementById('to').value.trim(); let phone=document.getElementById('phone').value.trim(); if(!from||!to||km<=0||!phone){alert('From,To,KM,Phone bharo');return;} let fare=Math.round(km*selectedRate); let isVan=['school-van','hiroof','coaster','bus'].includes(selectedType); let commission=0; if(!isVan){commission=Math.round(fare*0.10); totalEarn+=commission; localStorage.setItem('dr_owner_total_final',totalEarn);} let ride={id:Date.now(),type:selectedType,from,to,km,fare,commission,phone,time:new Date().toLocaleString(),hand:isVan}; rides.unshift(ride); localStorage.setItem('dr_rides_final',JSON.stringify(rides)); let box=document.getElementById('fareBox'); let hBox=document.getElementById('handBox'); box.style.display='block'; if(isVan){box.innerHTML=`<b>🚐 ${selectedType.toUpperCase()} - ${km} din/ride</b><br><b>Fare: Rs ${fare}</b>`; hBox.style.display='block'; hBox.innerHTML=`💵🤝 <b>HAND TO HAND CASH</b><br>Driver ko hath me dena hai - App ka koi lena dena nahi<br>📅 ${km} din ka: Rs ${fare}<br>Monthly (26 din): Rs ${fare*26/ km *26} = Rs ${Math.round(selectedRate*26*km/km)}`; } else {box.innerHTML=`<b>Fare: Rs ${fare}</b><br><span style="color:#00a344;font-weight:800">✓ Booked!</span>`; hBox.style.display='none';} renderHistory();}
+function calcVanMonthly(){let isVan=['school-van','hiroof','coaster','bus'].includes(selectedType); if(!isVan){alert('Pehle School Van/HiRoof/Coaster/Bus select karo!'); return;} let dailyRate=selectedRate; let days=parseFloat(document.getElementById('km').value)||0; if(days<=0){days=parseInt(prompt("Kitne din? 30 = 1 mahina"))||0;} if(days<=0) return; let total=dailyRate*days; let discounted=days>=26?Math.round(total*0.85):total; let hBox=document.getElementById('handBox'); hBox.style.display='block'; hBox.innerHTML=`📅 <b>${selectedType.toUpperCase()} MONTHLY HISAB - HAND TO HAND</b><br><br>Daily: Rs ${dailyRate}<br>Days: ${days}<br>Total: Rs ${total}<br>${days>=26?`🎉 Monthly Discount 15%: <b>Rs ${discounted}</b><br><small>Hand to Hand Cash - Driver ko hath me</small>`:`<b>Hand Cash: Rs ${total}</b>`}`; alert(`🚐 ${selectedType} - ${days} din\nTotal: Rs ${total}\n${days>=26?`Discount: Rs ${discounted} (15% off)`:`Hand to Hand: Rs ${total}`}\n\n💵 Hath o hath cash driver ko!`);}
+function renderHistory(){let h=document.getElementById('history'); if(rides.length==0){h.innerHTML='<div style="text-align:center;opacity:.4;padding:20px;font-size:12px">No rides</div>';return;} h.innerHTML=rides.slice(0,10).map(r=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f6f6f6;font-size:12px"><div><b>${r.type.toUpperCase()}</b> • ${r.km} ${r.hand?'Din':'KM'}<br><small style="opacity:.6">${r.from} → ${r.to}</small></div><div style="text-align:right"><b>Rs ${r.fare}</b><br>${r.hand?`<span style="background:#fff3e0;color:#e65100;padding:3px 8px;border-radius:99px;font-size:9px;font-weight:800">HAND CASH</span>`:`<span class="badge-ok">Booked</span>`}</div></div>`).join('');}
+function registerDriver(){let n=document.getElementById('dName').value.trim(); let p=document.getElementById('dPhone').value.trim(); let pass=document.getElementById('dPass').value.trim(); let city=document.getElementById('dCity').value.trim(); let vno=document.getElementById('dVehicleNo').value.trim(); if(!n||!p||!pass||!city||!vno){alert('Account lazmi - sab bharo!');return;} let drivers=JSON.parse(localStorage.getItem('dr_drivers_final')||'[]'); if(drivers.find(d=>d.phone===p)){alert('Account already hai!');return;} drivers.push({name:n,phone:p,password:pass,type:document.getElementById('dType').value,city:city,vehicleNo:vno,time:new Date().toLocaleString()}); localStorage.setItem('dr_drivers_final',JSON.stringify(drivers)); alert('✅ Account ban gaya!'); document.getElementById('dName').value=''; document.getElementById('dPhone').value=''; document.getElementById('dPass').value=''; document.getElementById('dCity').value=''; document.getElementById('dVehicleNo').value='';}
+function complaint(){let n=document.getElementById('cName').value.trim(); let m=document.getElementById('cMsg').value.trim(); if(!n||!m){alert('Naam aur Shikayat likho');return;} let cs=JSON.parse(localStorage.getItem('dr_complaints')||'[]'); cs.push({name:n,msg:m,time:new Date().toLocaleString()}); localStorage.setItem('dr_complaints',JSON.stringify(cs)); alert('Shikayat mil gayi!'); document.getElementById('cName').value=''; document.getElementById('cMsg').value='';}
+function updateRasta(){let area=document.getElementById('roadArea').value.trim(); let status=document.getElementById('roadStatus').value; if(!area){alert('Area likho!');return;} let updates=JSON.parse(localStorage.getItem('rasta_updates')||'[]'); updates.unshift({area:area,status:status,time:new Date().toLocaleString()}); localStorage.setItem('rasta_updates',JSON.stringify(updates)); document.getElementById('rastaUpdates').innerHTML=updates.slice(0,5).map(u=>`<div style="padding:8px 0;border-bottom:1px solid #eee"><b>${u.area}</b> - ${u.status}<br><small style="opacity:.6">${u.time}</small></div>`).join(''); alert('Rasta Update Live! 🛣️');}
+function loadRasta(){let updates=JSON.parse(localStorage.getItem('rasta_updates')||'[]'); if(updates.length>0){document.getElementById('rastaUpdates').innerHTML=updates.slice(0,5).map(u=>`<div style="padding:8px 0;border-bottom:1px solid #eee"><b>${u.area}</b> - ${u.status}<br><small style="opacity:.6">${u.time}</small></div>`).join('');}}
+loadRasta(); renderHistory();
+function toggleAI(){let w=document.getElementById('aiWin'); w.style.display=w.style.display==='block'?'none':'block';}
+function askAI(){let input=document.getElementById('aiInput'); let q=input.value.trim(); if(!q) return; let body=document.getElementById('aiBody'); body.innerHTML+=`<div class="ai-msg user">${q}</div>`; input.value=''; let lower=q.toLowerCase(); let reply=''; if(lower.includes('owner')||lower.includes('wallet')||lower.includes('earn')){reply=`🔒 Private info - Hand to Hand wale me app ka lena dena nahi!`;} else if(lower.includes('rasta')||lower.includes('jam')||lower.includes('band')||lower.includes('tuta')||lower.includes('danger')||lower.includes('khula')){let updates=JSON.parse(localStorage.getItem('rasta_updates')||'[]'); if(updates.length>0){reply=`🛣️ <b>LIVE Rasta:</b><br>`+updates.slice(0,3).map(u=>`• ${u.area}: ${u.status}`).join('<br>');} else {reply=`🛣️ Main Roads Khula ✅, Saddar me halka jam 🚦, Construction thora tuta ⚠️, Overall Safe ✅`;}} else if(lower.includes('van')||lower.includes('hiroof')||lower.includes('hand')||lower.includes('cash')||lower.includes('monthly')){reply=`🚐 <b>Van Hand to Hand:</b><br>💵 Cash driver ko hath me<br>School Van 150/day = Monthly 3825 (15% off)<br>HiRoof 200/day = Monthly 5100<br>Coaster 500/day, Bus 800/day<br>App ka lena dena nahi - Direct!`; } else if(lower.includes('fare')){reply=`💰 Bike 30, Rickshaw 45, Mini 55, Car 60, Loader 80, Truck 120<br>🚐 Van sab Hand to Hand Cash - Monthly discount 15%`; } else {reply=`🧭 Rasta AI - Rasta, Van Hand Cash, Fare pucho!`;} setTimeout(()=>{body.innerHTML+=`<div class="ai-msg bot">${reply}</div>`; body.scrollTop=body.scrollHeight;},300); body.scrollTop=body.scrollHeight;}
 </script>
 </body>
 </html>
