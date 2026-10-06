@@ -7,16 +7,110 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{background:#050505;color:#fff;overflow-x:hidden}
-.header{background:linear-gradient(90deg,#00c853,#00e676);padding:16px;text-align:center;font-weight:900;font-size:24px;position:sticky;top:0;z-index:999;box-shadow:0 4px 15px #000}
+.header{background:linear-gradient(90deg,#00c853,#00e676);padding:16px;text-align:center;font-weight:900;font-size:24px;position:sticky;top:0;z-index:999}
 .subheader{background:#111;padding:8px;text-align:center;color:#888;font-size:12px}
-.emer{background:linear-gradient(90deg,#ff0000,#ff3d00);margin:12px;padding:14px;border-radius:14px;text-align:center;font-weight:900;font-size:16px;animation:blink 1s infinite}
-@keyframes blink{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}}
+.emer{background:linear-gradient(90deg,#ff0000,#ff3d00);margin:12px;padding:14px;border-radius:14px;text-align:center;font-weight:900;animation:blink 1s infinite}
+@keyframes blink{0%{opacity:1}50%{opacity:.7}100%{opacity:1}}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
 .grid4{grid-template-columns:1fr 1fr 1fr 1fr}
-.card{background:linear-gradient(145deg,#1a1a1a,#222);border:1px solid #333;border-radius:18px;padding:18px;text-align:center;cursor:pointer;transition:0.3s;box-shadow:0 4px 10px #000}
-.card:hover{transform:scale(1.05);border-color:#00c853}
+.card{background:linear-gradient(145deg,#1a1a1a,#222);border:1px solid #333;border-radius:18px;padding:18px;text-align:center;cursor:pointer}
 .card b{color:#00c853;font-size:15px;display:block;margin-top:6px}
 .icon{font-size:32px}
-.box{background:linear-gradient(145deg,#161616,#1e1e1e);margin:12px;border-radius:18px;padding:16px;border:1px solid #2a2a2a}
-input,select,textarea{width:100%;padding:14px;margin:8px 0;border-radius:12px;border:1px solid #333;background:#222;color:#fff;font-size:14px}
-.btn
+.box{background:#161616;margin:12px;border-radius:18px;padding:16px;border:1px solid #2a2a2a}
+input,select,textarea{width:100%;padding:14px;margin:8px 0;border-radius:12px;border:1px solid #333;background:#222;color:#fff}
+.btn{background:linear-gradient(90deg,#00c853,#00e676);color:#fff;border:0;padding:15px;width:100%;border-radius:14px;font-weight:900;font-size:16px}
+.small{font-size:11px;color:#777}
+.tabs{display:flex;gap:8px;margin:12px;background:#111;padding:6px;border-radius:14px}
+.tab{flex:1;padding:12px;border-radius:10px;background:#222;text-align:center;font-weight:900;cursor:pointer;font-size:13px}
+.tab.active{background:linear-gradient(90deg,#00c853,#00e676)}
+.footer{background:#111;padding:20px;text-align:center;color:#555;font-size:11px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="header" id="mainHeader">🏍️ DAILY RIDE - ALL IN ONE</div>
+<div class="subheader">Bike | Car | Bus | Truck | Food | Daraz | Emergency</div>
+<div class="emer">🚨 EMERGENCY FREE - 0% COMMISSION</div>
+<div class="grid grid4">
+<div class="card" onclick="emergency('Police 15','15')"><div class="icon">🚓</div><b>Police</b><div class="small">15</div></div>
+<div class="card" onclick="emergency('Ambulance 115','115')"><div class="icon">🚑</div><b>Ambulance</b><div class="small">115</div></div>
+<div class="card" onclick="emergency('Fire 16','16')"><div class="icon">🚒</div><b>Fire</b><div class="small">16</div></div>
+<div class="card" onclick="emergency('Rescue 1122','1122')"><div class="icon">⛑️</div><b>Rescue</b><div class="small">1122</div></div>
+</div>
+<div class="tabs">
+<div class="tab active" id="t1" onclick="showTab('customer')">👤 CUSTOMER</div>
+<div class="tab" id="t2" onclick="showTab('driver')">🚗 DRIVER</div>
+<div class="tab" id="t3" onclick="showTab('history')">📜 HISTORY</div>
+</div>
+<div id="customerTab">
+<div class="grid">
+<div class="card" onclick="setS('Bike')"><div class="icon">🏍️</div><b>Bike</b><div class="small">Rs 150</div></div>
+<div class="card" onclick="setS('Car')"><div class="icon">🚗</div><b>Car AC</b><div class="small">Rs 300</div></div>
+<div class="card" onclick="setS('Suzuki')"><div class="icon">🚐</div><b>Suzuki</b></div>
+<div class="card" onclick="setS('Hiroof')"><div class="icon">🚐</div><b>Hi-Roof</b></div>
+<div class="card" onclick="setS('Hiace')"><div class="icon">🚌</div><b>Hiace</b></div>
+<div class="card" onclick="setS('Coaster')"><div class="icon">🚌</div><b>Coaster</b></div>
+<div class="card" onclick="setS('Bus')"><div class="icon">🚌</div><b>Bus</b></div>
+<div class="card" onclick="setS('Truck')"><div class="icon">🚚</div><b>Truck</b></div>
+<div class="card" onclick="setS('Food')"><div class="icon">🍔</div><b>Food</b></div>
+<div class="card" onclick="setS('Daraz')"><div class="icon">📦</div><b>Daraz</b></div>
+<div class="card" onclick="setS('Home Delivery')"><div class="icon">🏠</div><b>Delivery</b></div>
+<div class="card" onclick="setS('Pick & Drop')"><div class="icon">🔄</div><b>PickDrop</b></div>
+</div>
+<div class="box">
+<h3>📍 Ride Book Karo</h3>
+<input id="pickup" placeholder="Kahan se? Saddar">
+<input id="drop" placeholder="Kahan jana? Clifton">
+<select id="service"><option>Bike - Fast</option><option>Car - AC</option><option>Suzuki</option><option>Hiroof</option><option>Hiace</option><option>Coaster</option><option>Bus</option><option>Truck</option><option>Food</option><option>Daraz</option><option>Home Delivery</option><option>Pick & Drop</option></select>
+<button class="btn" onclick="bookNow()">✅ BOOK NOW</button>
+</div>
+</div>
+<div id="driverTab" style="display:none">
+<div class="box" style="border-color:#00c853;border-width:2px">
+<h3>🚗 Driver FREE Register</h3>
+<input id="dName" placeholder="Naam">
+<input id="dCnic" placeholder="CNIC 13 digits Lazmi">
+<input id="dPhone" placeholder="Mobile 11 digits">
+<select id="dVehicle"><option>Bike</option><option>Car</option><option>Suzuki</option><option>Hiroof</option><option>Hiace</option><option>Coaster</option><option>Bus</option><option>Truck</option></select>
+<input id="dVehicleNo" placeholder="Gari Number Lazmi">
+<input id="dLicense" placeholder="License Number Lazmi">
+<input id="dAccount" placeholder="Easypaisa/JazzCash 11 digits Lazmi">
+<button class="btn" onclick="registerDriver()">✅ Free Register</button>
+</div>
+<div class="box"><h3>💰 Total Earning Hidden</h3><div id="driverEarn" style="font-size:24px;font-weight:900;color:#00c853">Rs 0</div></div>
+</div>
+<div id="historyTab" style="display:none">
+<div class="box"><h3>📝 Shikayat</h3><textarea id="complainText" placeholder="Shikayat likho..."></textarea><button class="btn" style="background:linear-gradient(90deg,#ff3d00,#ff6d00)" onclick="submitComplain()">Bhejo</button><div id="historyList" class="small" style="margin-top:10px"></div></div>
+</div>
+<div class="footer">Daily Ride © 2026 - Secure<br>Owner: Header 5 Click + PIN 0318</div>
+<script>
+const _0xOWNER_AC = atob("MDMxODQwMTQ1MTU="); const CUT=10; const PIN="0318";
+function showTab(t){
+ document.getElementById('customerTab').style.display=t=='customer'?'block':'none';
+ document.getElementById('driverTab').style.display=t=='driver'?'block':'none';
+ document.getElementById('historyTab').style.display=t=='history'?'block':'none';
+ document.getElementById('t1').className=t=='customer'?'tab active':'tab';
+ document.getElementById('t2').className=t=='driver'?'tab active':'tab';
+ document.getElementById('t3').className=t=='history'?'tab active':'tab';
+}
+function setS(s){ let m={"Bike":"Bike - Fast","Car":"Car - AC"}; document.getElementById('service').value=m[s]||s; showTab('customer'); }
+function emergency(n,num){ if(confirm(n+" Call?")){ window.location.href=`tel:${num}`; } }
+function bookNow(){
+ let p=document.getElementById('pickup').value.trim(), d=document.getElementById('drop').value.trim(), s=document.getElementById('service').value;
+ if(!p||!d){ alert("Pickup Drop likho!"); return; }
+ let fare=200; if(s.includes('Bike')) fare=150; if(s.includes('Car')) fare=350; if(s.includes('Suzuki')) fare=800; if(s.includes('Hiroof')) fare=1100; if(s.includes('Hiace')) fare=1600; if(s.includes('Coaster')) fare=3200; if(s.includes('Bus')) fare=5500; if(s.includes('Truck')) fare=4200; if(s.includes('Food')||s.includes('Daraz')) fare=250;
+ let com=Math.round(fare*CUT/100); let total=parseInt(localStorage.getItem('DR_EARN')||'0')+com;
+ localStorage.setItem('DR_EARN',total); localStorage.setItem('LOG_'+Date.now(),btoa(JSON.stringify({fare,com,s})));
+ alert(`Booked! Fare Rs ${fare}`); document.getElementById('driverEarn').innerText=`Total: Rs ${total}`;
+}
+function registerDriver(){
+ let n=document.getElementById('dName').value.trim(), c=document.getElementById('dCnic').value.trim(), a=document.getElementById('dAccount').value.trim(), v=document.getElementById('dVehicleNo').value.trim(), l=document.getElementById('dLicense').value.trim();
+ if(!n||!c||!a||!v||!l){ alert("CNIC, Gari No, License, Account lazmi!"); return; }
+ localStorage.setItem('DRIVER_'+c, JSON.stringify({n,c,a,v,l}));
+ alert(`✅ ${n} Registered FREE!`);
+}
+function submitComplain(){ let t=document.getElementById('complainText').value.trim(); if(!t) return; let list=JSON.parse(localStorage.getItem('COMPLAINS')||'[]'); list.push({t,time:new Date().toLocaleString()}); localStorage.setItem('COMPLAINS',JSON.stringify(list)); alert("Save!"); }
+let clk=0; document.getElementById('mainHeader').onclick=()=>{ clk++; if(clk>=5){ clk=0; let p=prompt("OWNER PIN:"); if(p==PIN){ let tot=localStorage.getItem('DR_EARN')||0; alert(`OWNER\nTotal Rs ${tot}\nAc: ${_0xOWNER_AC}`);} } setTimeout(()=>clk=0,3000); };
+document.getElementById('driverEarn').innerText=`Total: Rs ${localStorage.getItem('DR_EARN')||0}`;
+</script>
+</body>
+</html>
