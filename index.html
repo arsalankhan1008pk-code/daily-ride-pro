@@ -1,68 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Daily Ride Pro - Final</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-body{background:#050505;color:#fff}
-.header{background:linear-gradient(90deg,#00c853,#00e676);padding:16px;text-align:center;font-weight:900;font-size:22px;position:sticky;top:0;z-index:999}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
-.grid4{grid-template-columns:1fr 1fr 1fr 1fr}
-.card{background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:16px;text-align:center;cursor:pointer}
-.card b{color:#00c853;font-size:13px;display:block;margin-top:4px}
-.box{background:#161616;margin:12px;border-radius:16px;padding:16px;border:1px solid #2a2a2a}
-input,select{width:100%;padding:14px;margin:8px 0;border-radius:12px;border:1px solid #333;background:#222;color:#fff}
-.btn{background:linear-gradient(90deg,#00c853,#00e676);color:#fff;border:0;padding:14px;width:100%;border-radius:12px;font-weight:900}
-.tabs{display:flex;gap:8px;margin:12px;background:#111;padding:6px;border-radius:12px}
-.tab{flex:1;padding:10px;border-radius:8px;background:#222;text-align:center;font-weight:900;cursor:pointer;font-size:12px}
-.tab.active{background:linear-gradient(90deg,#00c853,#00e676)}
-#popWrap{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999}
-#overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85)}
-#popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#151515;border:2px solid #00c853;border-radius:20px;padding:22px;width:88%;max-width:330px;text-align:center}
-</style>
-</head>
-<body>
-<div id="popWrap"><div id="overlay" onclick="closePop()"></div><div id="popup"><h2 id="popTitle" style="color:#00c853">✅ BOOKED!</h2><div id="popText" style="margin:14px 0;font-size:16px;line-height:1.6">Fare Rs 150</div><input id="popInput" style="display:none" placeholder="PIN 0318"><button class="btn" onclick="popOk()">OK</button></div></div>
-<div class="header" id="mainHeader">🏍️ DAILY RIDE PRO</div>
-<div class="grid grid4">
-<div class="card"><div>🚓</div><b>Police 15</b></div>
-<div class="card"><div>🚑</div><b>Ambulance 115</b></div>
-<div class="card"><div>🚒</div><b>Fire 16</b></div>
-<div class="card"><div>⛑️</div><b>Rescue 1122</b></div>
-</div>
-<div class="tabs"><div class="tab active" id="t1" onclick="showTab('customer')">👤 CUSTOMER</div><div class="tab" id="t2" onclick="showTab('driver')">🚗 DRIVER</div></div>
-<div id="customerTab">
-<div class="grid">
-<div class="card" onclick="setS('Bike')"><div>🏍️</div><b>Bike<br>Rs 150</b></div>
-<div class="card" onclick="setS('Car')"><div>🚗</div><b>Car<br>Rs 350</b></div>
-<div class="card" onclick="setS('Suzuki')"><div>🚐</div><b>Suzuki<br>Rs 800</b></div>
-<div class="card" onclick="setS('Bus')"><div>🚌</div><b>Bus<br>Rs 5000</b></div>
-</div>
-<div class="box">
-<h3>📍 Ride Book Karo - Sirf Fare</h3>
-<input id="pickup" placeholder="Kahan se?">
-<input id="drop" placeholder="Kahan jana?">
-<select id="service"><option>Bike - Fast</option><option>Car - AC</option><option>Suzuki</option><option>Bus</option><option>Truck</option></select>
-<button class="btn" onclick="bookNow()">✅ BOOK NOW</button>
-<div id="fareResult" style="display:none;margin-top:12px;background:#222;padding:12px;border-radius:12px;border:1px solid #333"></div>
-</div>
-</div>
-<div id="driverTab" style="display:none">
-<div class="box"><h3>🚗 Driver Register</h3><input id="dName" placeholder="Naam"><input id="dCnic" placeholder="CNIC"><input id="dAccount" placeholder="Easypaisa"><button class="btn" onclick="registerDriver()">Register</button><div id="driverEarn" style="color:#00c853;font-weight:900;margin-top:12px;text-align:center">Total: Rs 0</div></div>
-</div>
-<script>
-const _0xOWNER_AC=atob("MDMxODQwMTQ1MTU=");const OWNER_PIN="0318";let popMode="book";
-function showTab(t){document.getElementById('customerTab').style.display=t=='customer'?'block':'none';document.getElementById('driverTab').style.display=t=='driver'?'block':'none';document.getElementById('t1').className=t=='customer'?'tab active':'tab';document.getElementById('t2').className=t=='driver'?'tab active':'tab';}
-function setS(s){document.getElementById('service').value=s.includes('Bike')?'Bike - Fast':s.includes('Car')?'Car - AC':s.includes('Suzuki')?'Suzuki':s.includes('Bus')?'Bus':'Truck';}
-function openPop(title,html,showInput,mode){document.getElementById('popTitle').innerHTML=title;document.getElementById('popText').innerHTML=html;document.getElementById('popInput').style.display=showInput?'block':'none';popMode=mode;document.getElementById('popWrap').style.display='block';}
-function closePop(){document.getElementById('popWrap').style.display='none';}
-function popOk(){if(popMode=='pin'){let v=document.getElementById('popInput').value;if(v==OWNER_PIN){let tot=localStorage.getItem('DR_EARN')||0;openPop("👑 OWNER",`Total: Rs ${tot}<br>Ac: ${_0xOWNER_AC}`,false,'view');}else{closePop();}}else{closePop();}}
-function bookNow(){let p=document.getElementById('pickup').value.trim(),d=document.getElementById('drop').value.trim(),s=document.getElementById('service').value;if(!p||!d){openPop("⚠️","Pickup Drop likho!",false,'book');return;}let fare=150;if(s.includes('Bike'))fare=150;if(s.includes('Car'))fare=350;if(s.includes('Suzuki'))fare=800;if(s.includes('Bus'))fare=5000;if(s.includes('Truck'))fare=7000;let com=Math.round(fare*0.1);let tot=parseInt(localStorage.getItem('DR_EARN')||'0')+com;localStorage.setItem('DR_EARN',tot);document.getElementById('driverEarn').innerText='Total: Rs '+tot;let res=document.getElementById('fareResult');res.style.display='block';res.innerHTML=`✅ <b>${s} Booked!</b><br>📍 ${p} -> ${d}<br><br>💰 <b style="color:#00c853;font-size:22px">Fare: Rs ${fare}</b>`;openPop("✅ BOOKED!",`📍 ${p} → ${d}<br><br>💰 <b style="color:#00c853;font-size:28px">Rs ${fare}</b><br>${s}`,false,'book');}
-function registerDriver(){openPop("✅ DONE","Driver Registered!",false,'book');}
-let clk=0;document.getElementById('mainHeader').onclick=()=>{clk++;if(clk>=5){clk=0;document.getElementById('popInput').value='';openPop("OWNER PIN","PIN dalo:",true,'pin');}setTimeout(()=>clk=0,3000);};
-document.getElementById('driverEarn').innerText='Total: Rs '+(localStorage.getItem('DR_EARN')||0);
-</script>
-</body>
-</html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Daily Ride Super App - All In One</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}body{background:#050505;color:#fff}#map{height:180px;border-radius:12px;margin:8px}.header{background:linear-gradient(90deg,#00c853,#00e676);padding:14px;text-align:center;font-weight:900;font-size:18px;position:sticky;top:0;z-index:999}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}.grid4{grid-template-columns:1fr 1fr 1fr 1fr}.card{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:12px;text-align:center;cursor:pointer}.card b{color:#00c853;font-size:11px;display:block;margin-top:3px}.box{background:#161616;margin:8px;border-radius:12px;padding:12px;border:1px solid #2a2a2a}input,select{width:100%;padding:11px;margin:5px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}.btn{background:linear-gradient(90deg,#00c853,#00e676);color:#fff;border:0;padding:11px;width:100%;border-radius:10px;font-weight:900}.tabs{display:flex;gap:4px;margin:8px;background:#111;padding:4px;border-radius:10px;overflow-x:auto}.tab{flex:1;min-width:60px;padding:7px;border-radius:8px;background:#222;text-align:center;font-weight:900;cursor:pointer;font-size:10px}.tab.active{background:linear-gradient(90deg,#00c853,#00e676)}#popWrap{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999}#overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9)}#popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#151515;border:2px solid #00c853;border-radius:18px;padding:16px;width:92%;max-width:360px;text-align:center}.joker{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:999999;justify-content:center;align-items:center;flex-direction:column;text-align:center}</style></head><body>
+
+<div class="joker" id="joker"><div style="font-size:100px">🃏</div><h1 style="color:red;font-size:32px">HACKER DETECTED!</h1><p style="margin:10px;color:#fff">Aap Arsalan ke Super App ko hack kar rahe ho!<br>System Locked! 🤡<br>Contact Owner: 03184014515</p><button class="btn" style="width:200px" onclick="document.getElementById('joker').style.display='none'">OK Sorry!</button></div>
+
+<div id="popWrap"><div id="overlay" onclick="closePop()"></div><div id="popup"><h2 id="popTitle" style="color:#00c853">✅</h2><div id="popText" style="margin:8px 0;font-size:12px">Hi</div><div id="popExtra"></div><input id="popInput" style="display:none" placeholder="PIN"><button class="btn" onclick="popOk()">OK</button></div></div>
+
+<div class="header" id="mainHeader">🌍 DAILY RIDE SUPER APP</div>
+
+<div style="padding:8px;display:flex;gap:6px"><select id="lang" onchange="changeLang()" style="width:140px"><option value="ur">اردو / Urdu</option><option value="en">English</option><option value="pa">Punjabi</option><option value="sd">Sindhi</option><option value="ps">Pashto</option></select><div style="flex:1;background:#111;border-radius:10px;padding:8px;text-align:center;font-size:11px">💰 Commission: 10% → <span id="acc">03184014515</span> (JazzCash)</div></div>
+
+<div class="grid grid4"><div class="card"><div>🚓</div><b>Police 15</b></div><div class="card"><div>🚑</div><b>Ambulance 115</b></div><div class="card"><div>🚒</div><b>Fire 16</b></div><div class="card"><div>⛑️</div><b>Rescue 1122</b></div></div>
+
+<div id="map"></div>
+
+<div class="tabs"><div class="tab active" id="t1" onclick="showTab('ride')">🚗 RIDE</div><div class="tab" id="t2" onclick="showTab('van')">🚐 VAN</div><div class="tab" id="t3" onclick="showTab('bus')">🚌 BUS</div><div class="tab" id="t4" onclick="showTab('food')">🍔 FOOD</div><div class="tab" id="t5" onclick="showTab('mart')">🛒 MART</div><div class="tab" id="t6" onclick="showTab('daraz')">📦 DARAZ</div><div class="tab" id="t7" onclick="showTab('wallet')">💳 WALLET</div><div class="tab" id="t8" onclick="showTab('ai')">🤖 AI</div></div>
+
+<div id="rideTab"><div class="grid" id="fareCards"></div><div class="box"><h3 id="l_ride">📍 Ride Book Karo - Careem/Uber Style</h3><input id="pickup" placeholder="Kahan se?"><input id="drop" placeholder="Kahan jana?"><select id="service"></select><button class="btn" onclick="bookNow()">✅ BOOK NOW - Ghar Bethe Ride</button><div id="fareResult" style="display:none;margin-top:8px;background:#222;padding:8px;border-radius:10px"></div></div></div>
+
+<div id="vanTab" style="display:none"><div class="grid"><div class="card" onclick="trackVan('Hiroof')"><div>🚐</div><b>Hiroof<br>School</b></div><div class="card" onclick="trackVan('Hiace')"><div>🚐</div><b>Hiace<br>Van</b></div><div class="card" onclick="trackVan('Coaster')"><div>🚌</div><b>Coaster<br>Bus</b></div><div class="card" onclick="trackVan('Suzuki')"><div>🚐</div><b>Suzuki<br>Pickup</b></div></div><div class="box"><h3>🚌 School Van Live Track</h3><div style="background:#222;padding:8px;border-radius:8px;font-size:12px">🔴 LIVE: Hiroof #123 - Saddar se Clifton ja rahi hai - 5 min me apke stop pe!<br>🔴 LIVE: Hiace #456 - Gulshan route pe hai</div><input id="vanId" placeholder="Van Number / Bache ka naam"><button class="btn" onclick="trackNow()">📍 Track Karo</button></div></div>
+
+<div id="busTab" style="display:none"><div class="box"><h3>🚌 Bus / Coaster Booking</h3><select id="busType"><option>Suzuki - Rs 800 (7 seater)</option><option>Hiroof - Rs 1500 (12 seater)</option><option>Hiace - Rs 2500 (16 seater)</option><option>Coaster - Rs 5000 (30 seater)</option><option>Full Bus - Rs 12000 (50 seater)</option></select><input placeholder="Kahan se Kahan?"><button class="btn" onclick="bookBus()">🚌 Bus Book Karo</button></div></div>
+
+<div id="foodTab" style="display:none"><div class="grid"><div class="card" onclick="order('Biryani 350')"><div>🍛</div><b>Biryani<br>350</b></div><div class="card" onclick="order('Burger 300')"><div>🍔</div><b>Burger<br>300</b></div><div class="card" onclick="order('Pizza 800')"><div>🍕</div><b>Pizza<br>800</b></div><div class="card" onclick="order('Deal 999')"><div>🍱</div><b>Deal<br>999</b></div></div><div class="box"><input id="foodItem" placeholder="Food kya khana?"><button class="btn" onclick="bookFood()">🍔 Food Panda Style Order</button></div></div>
+
+<div id="martTab" style="display:none"><div class="grid"><div class="card" onclick="order('Aata 1200')"><div>🌾</div><b>Aata<br>1200</b></div><div class="card" onclick="order('Oil 500')"><div>🛢️</div><b>Oil<br>500</b></div><div class="card" onclick="order('Super Mart Deal')"><div>🛒</div><b>Super Mart<br>Deal</b></div><div class="card" onclick="order('Sabzi 300')"><div>🥦</div><b>Sabzi<br>300</b></div></div><div class="box"><h3>🛒 Shopping / Super Mart</h3><input id="martItem" placeholder="Kya chahiye?"><button class="btn" onclick="bookMart()">🛒 Ghar Bethe Mangwao</button></div></div>
+
+<div id="darazTab" style="display:none"><div class="box"><h3>📦 Daraz Pick n Drop</h3><input id="darazFrom" placeholder="Pick kahan se?"><input id="darazTo" placeholder="Drop kahan?"><select><option>Document - Rs 100</option><option>Parcel Small - Rs 200</option><option>Parcel Large - Rs 400</option><option>Daraz Return - Rs 150</option></select><button class="btn" onclick="bookDaraz()">📦 Pick n Drop Book Karo</button></div></div>
+
+<div id="walletTab" style="display:none"><div class="box"><h3>💳 Wallet + Registration</h3><input placeholder="Apna Naam"><input placeholder="JazzCash / Easypaisa Number"><input placeholder="CNIC (Registration ke liye)"><div style="background:#222;padding:10px;border-radius:10px;margin:8px 0;font-size:11px">✅ Registration: Free<br>✅ Har Ride se 10% Commission Auto Owner Account me: <b style="color:#00e676">03184014515</b><br>✅ User ko pata bhi nahi chalega - Auto deduct!<br>✅ Paise aapke account me safe ayenge!</div><button class="btn" onclick="register
