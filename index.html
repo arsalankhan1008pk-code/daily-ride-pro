@@ -3,61 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Daily Ride Super App</title>
+<title>Daily Ride Super App - Live Tracking</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#050505;color:#fff}
-.header{background:linear-gradient(90deg,#00c853,#00e676);padding:16px;text-align:center;font-weight:900;position:sticky;top:0;z-index:999}
-#map{height:200px;margin:8px;border-radius:12px}
-.tabs{display:flex;gap:4px;padding:8px;background:#111;overflow-x:auto}
-.tab{padding:8px 12px;background:#222;border-radius:8px;font-size:11px;font-weight:900;cursor:pointer;min-width:70px;text-align:center}
-.tab.active{background:linear-gradient(90deg,#00c853,#00e676)}
+.header{background:linear-gradient(90deg,#00c853,#00e676);padding:14px;text-align:center;font-weight:900;position:sticky;top:0;z-index:99;font-size:16px}
+#map{height:240px;margin:8px;border-radius:12px;border:2px solid #00c853}
+.tabs{display:flex;gap:4px;padding:8px;background:#111;overflow-x:auto;position:sticky;top:48px;z-index:90}
+.tab{padding:8px 10px;background:#222;border-radius:8px;font-size:10px;font-weight:900;cursor:pointer;min-width:55px;text-align:center;white-space:nowrap}
+.tab.active{background:linear-gradient(90deg,#00c853,#00e676);color:#fff}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
-.card{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:12px;text-align:center}
+.card{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:12px;text-align:center;cursor:pointer}
 .box{background:#161616;margin:8px;border-radius:12px;padding:12px;border:1px solid #2a2a2a}
 input,select{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
-.btn{background:linear-gradient(90deg,#00c853,#00e676);color:#fff;border:0;padding:12px;width:100%;border-radius:10px;font-weight:900}
+.btn{background:linear-gradient(90deg,#00c853,#00e676);color:#fff;border:0;padding:12px;width:100%;border-radius:10px;font-weight:900;cursor:pointer;margin-top:6px}
+.trackBox{background:linear-gradient(90deg,#111,#1e3a2a);border:2px solid #00c853;border-radius:12px;padding:10px;margin-top:10px;display:none}
+.progress{height:10px;background:#333;border-radius:10px;overflow:hidden;margin:8px 0}
+.bar{height:100%;background:linear-gradient(90deg,#00c853,#00e676);width:10%;transition:1.2s}
 #popWrap{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999}
 #overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9)}
 #popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#151515;border:2px solid #00c853;border-radius:18px;padding:16px;width:90%;max-width:340px;text-align:center}
-.joker{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:999999;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.joker{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:999999;flex-direction:column;justify-content:center;align-items:center}
 </style>
 </head>
 <body>
-<div class="joker" id="joker"><div style="font-size:80px">🃏</div><h1 style="color:red">HACKER DETECTED!</h1><p>Owner: 03184014515<br>System Locked!</p><button class="btn" style="width:200px" onclick="document.getElementById('joker').style.display='none'">Sorry</button></div>
-<div id="popWrap"><div id="overlay" onclick="closePop()"></div><div id="popup"><h2 id="popTitle">✅</h2><div id="popText"></div><div id="popExtra"></div><input id="popInput" style="display:none"><button class="btn" onclick="popOk()">OK</button></div></div>
-<div class="header" id="mainHeader">🌍 DAILY RIDE SUPER APP - ALL IN ONE</div>
-<div style="display:flex;gap:6px;padding:8px"><select id="lang" onchange="changeLang()" style="width:130px"><option value="ur">اردو</option><option value="en">English</option><option value="pa">Punjabi</option><option value="sd">Sindhi</option></select><div style="flex:1;background:#111;padding:8px;border-radius:10px;text-align:center;font-size:11px">💰 10% → 03184014515 Auto</div></div>
-<div class="grid" style="grid-template-columns:1fr 1fr 1fr 1fr"><div class="card">🚓<br><b>Police 15</b></div><div class="card">🚑<br><b>115</b></div><div class="card">🚒<br><b>Fire 16</b></div><div class="card">⛑️<br><b>1122</b></div></div>
+
+<div class="joker" id="joker"><div style="font-size:80px">🃏</div><h1 style="color:red">HACKER DETECTED!</h1><p>Owner: 03184014515</p><button class="btn" style="width:180px" onclick="document.getElementById('joker').style.display='none'">Sorry</button></div>
+<div id="popWrap"><div id="overlay" onclick="closePop()"></div><div id="popup"><h2 id="popTitle">✅</h2><div id="popText"></div><div id="popExtra"></div><input id="popInput" style="display:none" placeholder="PIN"><button class="btn" onclick="popOk()">OK</button></div></div>
+
+<div class="header" id="mainHeader">🌍 DAILY RIDE - ALL IN ONE - LIVE TRACKING</div>
+
+<div style="display:flex;gap:6px;padding:8px">
+<select id="lang" style="width:110px"><option>اردو</option><option>English</option></select>
+<div style="flex:1;background:#111;padding:8px;border-radius:10px;text-align:center;font-size:10px">💰 10% → 03184014515 Auto</div>
+</div>
+
+<div class="grid" style="grid-template-columns:1fr 1fr 1fr 1fr">
+<div class="card" style="padding:6px">🚓<br><b style="font-size:10px">Madad 15</b></div>
+<div class="card" style="padding:6px">🚑<br><b style="font-size:10px">115</b></div>
+<div class="card" style="padding:6px">🚒<br><b style="font-size:10px">16</b></div>
+<div class="card" style="padding:6px">⛑️<br><b style="font-size:10px">1122</b></div>
+</div>
+
 <div id="map"></div>
-<div class="tabs"><div class="tab active" onclick="showTab('ride',this)">🚗 RIDE</div><div class="tab" onclick="showTab('van',this)">🚐 VAN</div><div class="tab" onclick="showTab('bus',this)">🚌 BUS</div><div class="tab" onclick="showTab('food',this)">🍔 FOOD</div><div class="tab" onclick="showTab('mart',this)">🛒 MART</div><div class="tab" onclick="showTab('daraz',this)">📦 DARAZ</div><div class="tab" onclick="showTab('wallet',this)">💳 WALLET</div><div class="tab" onclick="showTab('ai',this)">🤖 AI</div></div>
-<div id="rideTab" class="tabPage"><div class="grid" id="fareCards"></div><div class="box"><h3>📍 Careem Uber InDrive - Ride</h3><input id="pickup" placeholder="Kahan se?"><input id="drop" placeholder="Kahan jana?"><select id="service"></select><button class="btn" onclick="bookNow()">✅ BOOK NOW</button><div id="fareResult" style="display:none;margin-top:8px;background:#222;padding:8px;border-radius:10px"></div></div></div>
-<div id="vanTab" class="tabPage" style="display:none"><div class="grid"><div class="card" onclick="trackVan('Hiroof School')">🚐<br><b>Hiroof School</b></div><div class="card" onclick="trackVan('Hiace')">🚐<br><b>Hiace Van</b></div><div class="card" onclick="trackVan('Coaster')">🚌<br><b>Coaster</b></div><div class="card" onclick="trackVan('Suzuki')">🚐<br><b>Suzuki</b></div></div><div class="box"><h3>🚌 School Van Live Track</h3><p style="font-size:12px;background:#222;padding:8px;border-radius:8px">🔴 Hiroof #123 - Saddar → Clifton - 5 min me stop pe!<br>🔴 Hiace #456 - Gulshan route</p><button class="btn" onclick="trackNow()">📍 LIVE TRACK</button></div></div>
-<div id="busTab" class="tabPage" style="display:none"><div class="box"><h3>🚌 Hiroof Hiace Coaster Bus</h3><select><option>Suzuki 800 (7 seater)</option><option>Hiroof 1500 (12 seater)</option><option>Hiace 2500 (16 seater)</option><option>Coaster 5000 (30 seater)</option><option>Full Bus 12000 (50 seater)</option></select><input placeholder="Kahan se Kahan?"><button class="btn" onclick="pop('🚌 BOOKED!','Bus Booked! Driver 10 min me!')">🚌 Book Bus</button></div></div>
-<div id="foodTab" class="tabPage" style="display:none"><div class="grid"><div class="card" onclick="pop('🍔 ORDERED!','Biryani 350 - 30 min me delivery!')">🍛<br><b>Biryani 350</b></div><div class="card" onclick="pop('🍔 ORDERED!','Burger 300 - 30 min!')">🍔<br><b>Burger 300</b></div><div class="card" onclick="pop('🍔 ORDERED!','Pizza 800 - 30 min!')">🍕<br><b>Pizza 800</b></div><div class="card" onclick="pop('🍔 ORDERED!','Deal 999!')">🍱<br><b>Deal 999</b></div></div></div>
-<div id="martTab" class="tabPage" style="display:none"><div class="grid"><div class="card" onclick="pop('🛒 ORDERED!','Aata 1200 - 1 hour me!')">🌾<br><b>Aata 1200</b></div><div class="card" onclick="pop('🛒 ORDERED!','Oil 500')">🛢️<br><b>Oil 500</b></div><div class="card" onclick="pop('🛒 ORDERED!','Super Mart Deal!')">🛒<br><b>Mart Deal</b></div><div class="card" onclick="pop('🛒 ORDERED!','Sabzi 300')">🥦<br><b>Sabzi 300</b></div></div><div class="box"><h3>🛒 Super Mart - Ghar Bethe</h3><button class="btn" onclick="pop('🛒 ORDERED!','Super Mart 1 hour me ghar pe!')">🛒 Order Now</button></div></div>
-<div id="darazTab" class="tabPage" style="display:none"><div class="box"><h3>📦 Daraz Pick n Drop</h3><input placeholder="Pick kahan se?"><input placeholder="Drop kahan?"><select><option>Document 100</option><option>Small Parcel 200</option><option>Large Parcel 400</option><option>Daraz Return 150</option></select><button class="btn" onclick="pop('📦 BOOKED!','Daraz Rider ayega!')">📦 Book Pick n Drop</button></div></div>
-<div id="walletTab" class="tabPage" style="display:none"><div class="box"><h3>💳 Wallet + Registration</h3><input placeholder="Apna Naam"><input placeholder="JazzCash Number"><input placeholder="CNIC"><div style="background:#222;padding:10px;border-radius:10px;margin:8px 0;font-size:11px">✅ Registration Free<br>✅ Har booking se 10% Auto Owner Account: <b style="color:#00e676">03184014515</b><br>✅ User ko pata nahi chalega!</div><button class="btn" onclick="pop('✅ REGISTERED!','Ho gaya! Ab sab use kar sakte ho!')">✅ Register</button></div></div>
-<div id="aiTab" class="tabPage" style="display:none"><div class="box"><h3>🤖 Meta AI - Har Zuban</h3><div id="chatBox" style="height:120px;overflow:auto;background:#222;padding:8px;border-radius:10px;font-size:11px">🤖 Salaam! Main aapka guide hun! Urdu English Punjabi Sindhi sab samajhta hun!<br>Bolo kya chahiye? Ride? Food? Van?</div><input id="chatInput" placeholder="Urdu/English me likho..."><button class="btn" onclick="sendChat()">🤖 Puchho</button></div></div>
+
+<div class="tabs">
+<div class="tab active" onclick="showTab('ride',this)">🚗 RIDE</div>
+<div class="tab" onclick="showTab('van',this)">🚐 VAN</div>
+<div class="tab" onclick="showTab('bus',this)">🚌 BUS</div>
+<div class="tab" onclick="showTab('food',this)">🍔 FOOD</div>
+<div class="tab" onclick="showTab('mart',this)">🛒 MART</div>
+<div class="tab" onclick="showTab('daraz',this)">📦 PARCEL</div>
+<div class="tab" onclick="showTab('wallet',this)">💳 WALLET</div>
+<div class="tab" onclick="showTab('ai',this)">🤖 AI</div>
+</div>
+
+<!-- RIDE -->
+<div id="rideTab" class="tabPage">
+<div class="grid" id="fareCards"></div>
+<div class="box"><h3>📍 Daily Ride - Book Karein</h3>
+<input id="pickup" placeholder="Kahan se pick karna hai?"><input id="drop" placeholder="Kahan jana hai?">
+<select id="service"></select>
+<button class="btn" onclick="bookNow()">✅ BOOK NOW - LIVE TRACK</button>
+<div id="fareResult" style="display:none;margin-top:8px;background:#222;padding:8px;border-radius:10px"></div>
+<div id="rideTrack" class="trackBox">
+<h4>🔴 LIVE - Rider Aa Raha Hai - Ghar Bethe Dekho!</h4>
+<div style="display:flex;justify-content:space-between;font-size:11px"><span id="rideEta">ETA: 8 min</span><span>📍 Map Pe Live</span></div>
+<div class="progress"><div class="bar" id="rideBar"></div></div>
+<div style="font-size:11px">🏍️ Rider Ali - 0300-1234567 | Bike KHI-123<br>📍 Map pe blue 🏍️ move ho raha hai dekho!</div>
+<button class="btn" style="padding:6px" onclick="callRider()">📞 Rider Ko Call</button>
+</div></div></div>
+
+<!-- VAN -->
+<div id="vanTab" class="tabPage" style="display:none">
+<div class="grid">
+<div class="card" onclick="trackVan('School Hiroof')">🚐<br><b>School Hiroof</b></div>
+<div class="card" onclick="trackVan('Hiace')">🚐<br><b>Hiace</b></div>
+<div class="card" onclick="trackVan('Coaster')">🚌<br><b>Coaster</b></div>
+<div class="card" onclick="trackVan('Suzuki')">🚐<br><b>Suzuki</b></div>
+</div>
+<div class="box"><h3>🚌 Van - Bachon Ki Live Location</h3>
+<div id="vanTrack" class="trackBox" style="display:block">
+<h4>🔴 LIVE VAN TRACK - Ghar Bethe Dekho!</h4>
+<div style="font-size:11px">🚐 Van #123 - Saddar → Clifton<br>📍 Abhi Tower pe hai - 5 min me stop pe!<br>👶 Bache safe - Map pe live dekho!</div>
+<div class="progress"><div class="bar" style="width:65%"></div></div>
+</div>
+<button class="btn" onclick="trackNow()">📍 Location Refresh</button>
+</div></div>
+
+<!-- BUS -->
+<div id="busTab" class="tabPage" style="display:none">
+<div class="box"><h3>🚌 Bus - Live Location</h3>
+<div class="grid">
+<div class="card" onclick="trackBus('Route 1')">🚌<br><b>Route 1</b><br><small>Saddar to Clifton</small></div>
+<div class="card" onclick="trackBus('Route 2')">🚌<br><b>Route 2</b><br><small>Tower to Gulshan</small></div>
+</div>
+<div id="busTrack" class="trackBox">
+<h4>🔴 BUS LIVE - Kahan Hai Dekho!</h4>
+<div style="display:flex;justify-content:space-between;font-size:11px"><span id="busEta">ETA: 12 min</span><span>📍 Live</span></div>
+<div class="progress"><div class="bar" id="busBar"></div></div>
+<div style="font-size:11px">🚌 Bus abhi <b id="busLoc">Numaish</b> pe hai<br>Ghar bethe dekho kab aayegi!</div>
+</div></div></div>
+
+<!-- FOOD -->
+<div id="foodTab" class="tabPage" style="display:none">
+<div class="grid">
+<div class="card" onclick="orderFood('Biryani',350)">🍛<br><b>Biryani<br>350</b></div>
+<div class="card" onclick="orderFood('Burger',300)">🍔<br><b>Burger<br>300</b></div>
+<div class="card" onclick="orderFood('Pizza',800)">🍕<br><b>Pizza<br>800</b></div>
+<div class="card" onclick="orderFood('Family Deal',999)">🍱<br><b>Deal<br>999</b></div>
+</div>
+<div class="box"><h3>🍔 Food - Ghar Bethe Live Track</h3>
+<div id="foodTrack" class="trackBox">
+<h4 id="foodTitle">🔴 ORDER LIVE TRACKING</h4>
+<div style="display:flex;justify-content:space-between;font-size:11px"><span id="foodEta">ETA: 25 min</span><span id="foodStatus">👨‍🍳 Bana raha</span></div>
+<div class="progress"><div class="bar" id="foodBar"></div></div>
+<div style="font-size:11px">📍 Restaurant se aapki taraf aa raha hai - Map pe 🏍️ dekho!<br>🏍️ Rider Ahmed - Live location move ho raha!</div>
+<button class="btn" style="padding:6px" onclick="callRider()">📞 Call Rider</button>
+</div></div></div>
+
+<!-- MART -->
+<div id="martTab" class="tabPage" style="display:none">
+<div class="grid">
+<div class="card" onclick="orderMart('Aata 10kg 1200')">🌾<br><b>Aata<br>1200</b></div>
+<div class="card" onclick="orderMart('Oil 5L 500')">🛢️<br><b>Oil<br>500</b></div>
+<div class="card" onclick="orderMart('Sabzi 300')">🥦<br><b>Sabzi<br>300</b></div>
+<div class="card" onclick="orderMart('Mart Deal')">🛒<br><b>Deal</b></div>
+</div>
+<div class="box"><h3>🛒 Super Mart - Live Track</h3>
+<div id="martTrack" class="trackBox">
+<h4>🔴 MART LIVE DELIVERY</h4>
+<div style="display:flex;justify-content:space-between;font-size:11px"><span id="martEta">ETA: 40 min</span><span>🛒 Packing</span></div>
+<div class="progress"><div class="bar" id="martBar"></div></div>
+<div style="font-size:11px">📦 Saman store se nikal chuka - Ghar bethe Map pe dekho kahan hai!</div>
+</div></div></div>
+
+<!-- PARCEL / DARAZ -->
+<div id="darazTab" class="tabPage" style="display:none">
+<div class="box"><h3>📦 Parcel / Daraz - LIVE TRACKING</h3>
+<input id="darazPick" placeholder="Pick kahan se?"><input id="darazDrop" placeholder="Drop kahan?">
+<select><option>Document 100</option><option>Small Box 200</option><option>Large Box 400</option><option>Return Parcel 150</option></select>
+<button class="btn" onclick="bookDaraz()">📦 BOOK & LIVE TRACK</button>
+<div id="darazTrack" class="trackBox">
+<h4>🔴 PARCEL LIVE LOCATION - Ghar Bethe Dekho!</h4>
+<div style="display:flex;justify-content:space-between;font-size:11px"><span id="darazEta">ETA: 60 min</span><span>📦 Picked</span></div>
+<div class="progress"><div class="bar" id="darazBar"></div></div>
+<div style="font-size:11px">📍 Parcel abhi: <b id="darazLoc">Saddar Warehouse</b> pe<br>🚚 Van KHI-789 - Live Map pe blue dot move ho raha!<br>⏰ Kitne der me aayega - Live countdown!</div>
+<button class="btn" style="padding:6px" onclick="shareLive()">📤 Share Live Location - Family Dekhe</button>
+</div></div></div>
+
+<!-- WALLET -->
+<div id="walletTab" class="tabPage" style="display:none"><div class="box"><h3>💳 Wallet</h3><input placeholder="Naam"><input placeholder="JazzCash Number"><div style="background:#222;padding:8px;border-radius:10px;font-size:11px">✅ Har booking 10% → 03184014515 Auto</div><button class="btn" onclick="pop('✅ REGISTERED!','Ho gaya!')">✅ Register</button></div></div>
+<!-- AI -->
+<div id="aiTab" class="tabPage" style="display:none"><div class="box"><h3>🤖 AI Guide</h3><div id="chatBox" style="height:100px;overflow:auto;background:#222;padding:8px;border-radius:10px;font-size:11px">🤖 Bolo - Live track chahiye?</div><input id="chatInput" placeholder="Urdu me likho..."><button class="btn" onclick="sendChat()">🤖 Puchho</button></div></div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const _0xAC=atob("MDMxODQwMTQ1MTU=");const P1="0318";const P2="7860";let fares=JSON.parse(localStorage.getItem('DR_FARES')||'{"Bike Careem 150":150,"Car Uber 350":350,"Rickshaw InDrive 200":200,"Suzuki Hiroof 800":800,"Hiace 2500":2500,"Coaster Bus 5000":5000}');let popMode="book";
+const _0xAC=atob("MDMxODQwMTQ1MTU=");const P1="0318",P2="7860";
+let fares=JSON.parse(localStorage.getItem('DR_FARES')||'{"Bike Ride 150":150,"Car Ride 350":350,"Rickshaw Ride 200":200,"Suzuki 800":800,"Hiace 2500":2500,"Coaster Bus 5000":5000}');
+let map,riderMarker,userMarker,trackInterval;
 function saveF(){localStorage.setItem('DR_FARES',JSON.stringify(fares));renderF();}
-function renderF(){let c=document.getElementById('fareCards');let s=document.getElementById('service');c.innerHTML='';s.innerHTML='';for(let k in fares){c.innerHTML+=`<div class="card"><div>🚗</div><b>${k}<br>Rs ${fares[k]}</b></div>`;s.innerHTML+=`<option>${k} - Rs ${fares[k]}</option>`;}}
-function showTab(t,el){document.querySelectorAll('.tabPage').forEach(x=>x.style.display='none');document.getElementById(t+'Tab').style.display='block';document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');}
-function openPop(t,h,i,m,e=''){document.getElementById('popTitle').innerHTML=t;document.getElementById('popText').innerHTML=h;document.getElementById('popInput').style.display=i?'block':'none';document.getElementById('popExtra').innerHTML=e;popMode=m;document.getElementById('popWrap').style.display='block';}
+function renderF(){let c=document.getElementById('fareCards'),s=document.getElementById('service');c.innerHTML='';s.innerHTML='';for(let k in fares){c.innerHTML+=`<div class="card"><b>${k}<br>Rs ${fares[k]}</b></div>`;s.innerHTML+=`<option>${k} - Rs ${fares[k]}</option>`;}}
+function showTab(t,el){document.querySelectorAll('.tabPage').forEach(x=>x.style.display='none');document.getElementById(t+'Tab').style.display='block';document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');setTimeout(()=>{if(map)map.invalidateSize();},200);}
+function openPop(t,h,i,m,e=''){document.getElementById('popTitle').innerHTML=t;document.getElementById('popText').innerHTML=h;document.getElementById('popInput').style.display=i?'block':'none';document.getElementById('popExtra').innerHTML=e;document.getElementById('popWrap').style.display='block';popMode=m;}
 function closePop(){document.getElementById('popWrap').style.display='none';}
 function pop(t,h){openPop(t,h,false,'book');}
-function popOk(){if(popMode=='pin'){let v=document.getElementById('popInput').value;let tot=localStorage.getItem('DR_EARN')||0;if(v==P1||v==P2){let ed='';for(let k in fares){ed+=`${k}: <input id="f_${k}" value="${fares[k]}" style="padding:5px;margin:2px 0" type="number"><br>`;}ed+=`<button class="btn" onclick="updF()">Save</button><div style="font-size:10px;margin-top:6px">Total 10%: Rs ${tot}<br>Ac: ${_0xAC} ✅<br>Joker ON 🃏</div>`;openPop("👑 OWNER","Welcome Boss! All Systems ON!",false,'view',ed);}else{closePop();}}else{closePop();}}
-function updF(){for(let k in fares){let el=document.getElementById('f_'+k);if(el&&el.value)fares[k]=parseInt(el.value);}saveF();openPop("✅ SAVED","Updated!",false,'book');}
-function bookNow(){let p=document.getElementById('pickup').value,d=document.getElementById('drop').value,s=document.getElementById('service').value;if(!p||!d){pop('⚠️','Pickup Drop likho!');return;}let k=s.split(' - ')[0];let fare=fares[k]||150;let com=Math.round(fare*0.1);let tot=parseInt(localStorage.getItem('DR_EARN')||'0')+com;localStorage.setItem('DR_EARN',tot);document.getElementById('fareResult').style.display='block';document.getElementById('fareResult').innerHTML=`✅ ${k} Booked Rs ${fare} - Com Rs ${com} → ${_0xAC}`;pop('✅ BOOKED!',`📍 ${p} → ${d}<br>💰 Rs ${fare}<br>Ghar bethe service!`);}
-function trackVan(t){pop('📍 TRACKING!',t+' Live Track ON! Map me dekho!');}
-function trackNow(){pop('📍 LIVE!','Van 2 min me stop pe! Live Map dekho!');}
-function sendChat(){let inp=document.getElementById('chatInput');let txt=inp.value.trim();if(!txt)return;let box=document.getElementById('chatBox');box.innerHTML+=`<div>👤: ${txt}</div>`;let ans=txt.match(/[\u0600-\u06FF]/)?"جی بالکل! رائیڈ، فوڈ، وین سب گھر بیٹھے ملے گا!":"Ride, Food, Van, Mart - All at home! Live Map ON!";box.innerHTML+=`<div style="color:#00e676">🤖: ${ans}</div>`;inp.value="";box.scrollTop=box.scrollHeight;}
-function changeLang(){let l=document.getElementById('lang').value;pop('🌍 Language',l=='ur'?'اردو ON!':'Language '+l+' ON! App aapki zuban me!');}
-let clk=0;document.getElementById('mainHeader').onclick=()=>{clk++;if(clk>=5){clk=0;openPop("🔐","PIN:",true,'pin');}setTimeout(()=>clk=0,2500);};
-try{let map=L.map('map').setView([24.8607,67.0011],12);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);L.marker([24.8607,67.0011]).addTo(map).bindPopup("Karachi Hub");L.marker([24.90,67.05]).addTo(map).bindPopup("Hiroof Live 🚌");}catch(e){}
+let popMode="book";
+function popOk(){if(popMode=='pin'){let v=document.getElementById('popInput').value;if(v==P1||v==P2){let ed='';for(let k in fares){ed+=`${k}: <input id="f_${k}" value="${fares[k]}" style="padding:5px;margin:3px 0" type="number"><br>`;}ed+=`<button class="btn" onclick="updF()">Save Fare</button><div style="font-size:10px">Total Earn: Rs ${localStorage.getItem('DR_EARN')||0}<br>Ac: ${_0xAC} ✅</div>`;openPop("👑 OWNER PANEL","Welcome!",false,'view',ed);}else closePop();}else closePop();}
+function updF(){for(let k in fares){let el=document.getElementById('f_'+k);if(el&&el.value)fares[k]=parseInt(el.value);}saveF();openPop("✅ SAVED","Fare Update!",false,'book');}
+
+function startLiveTrack(type){
+let eta=8; if(type=='ride')eta=8; if(type=='food')eta=25; if(type=='mart')eta=40; if(type=='daraz')eta=60; if(type=='bus')eta=12;
+let box=document.getElementById(type+'Track'); if(box)box.style.display='block';
+let curEta=eta; clearInterval(trackInterval);
+trackInterval=setInterval(()=>{
+curEta-=0.5; if(curEta<0)curEta=0;
+let pct=Math.round(((eta-curEta)/eta)*100);
+let bar=document.getElementById(type+'Bar'); let et=document.getElementById(type+'Eta');
+if(bar)bar.style.width=pct+'%';
+if(et)et.innerHTML='ETA: '+Math.ceil(curEta)+' min - 🔴 LIVE';
+if(riderMarker&&map){let ll=riderMarker.getLatLng(); riderMarker.setLatLng([ll.lat+0.0008,ll.lng+0.0008]); map.panTo(riderMarker.getLatLng());}
+if(curEta<=0){clearInterval(trackInterval); pop('✅ REACHED!','Rider pohch gaya! 📍');}
+},1500);
+}
+
+function bookNow(){let p=document.getElementById('pickup').value,d=document.getElementById('drop').value,s=document.getElementById('service').value;if(!p||!d){pop('⚠️','Pickup Drop likho!');return;}let k=s.split(' - ')[0];let fare=fares[k]||150;let com=Math.round(fare*0.1);let tot=parseInt(localStorage.getItem('DR_EARN')||'0')+com;localStorage.setItem('DR_EARN',tot);document.getElementById('fareResult').style.display='block';document.getElementById('fareResult').innerHTML=`✅ ${k} Rs ${fare} - Com Rs ${com} → ${_0xAC}`;pop('✅ BOOKED!',`📍 ${p} → ${d}<br>💰 Rs ${fare}<br>🔴 LIVE MAP ON - Rider move ho raha dekho!`);startLiveTrack('ride');}
+function orderFood(n,p){pop('🍔 ORDERED!',`${n} Rs ${p} - Accept! 🔴 Live Track ON - Map dekho!`);document.getElementById('foodTitle').innerHTML=`🔴 ${n} - LIVE`;startLiveTrack('food');}
+function orderMart(n){pop('🛒 ORDERED!',`${n} - Pack ho raha! Live Track ON!`);startLiveTrack('mart');}
+function bookDaraz(){let pk=document.getElementById('darazPick').value, dr=document.getElementById('darazDrop').value;if(!pk||!dr){pop('⚠️','Pick Drop likho!');return;}pop('📦 BOOKED!','Parcel Booked! Live Location ON! Ghar bethe dekho!');startLiveTrack('daraz');}
+function trackVan(t){pop('📍 TRACKING!',t+' Live! 5 min me! Map pe dekho!');startLiveTrack('ride');}
+function trackBus(r){document.getElementById('busTrack').style.display='block';pop('🚌 TRACKING!',r+' Live! Numaish pe hai!');startLiveTrack('bus');}
+function trackNow(){pop('📍 LIVE!','Location Refresh - Map pe dekho!');}
+function callRider(){pop('📞 CALL','Rider Ali - 0318-xxxx<br>Calling...');}
+function shareLive(){pop('📤 SHARED!','Live location WhatsApp pe share - Family dekh sakti hai kahan hai!');}
+function sendChat(){let i=document.getElementById('chatInput'),b=document.getElementById('chatBox');if(!i.value)return;b.innerHTML+=`<div>👤: ${i.value}</div>`;b.innerHTML+=`<div style="color:#00e676">🤖: Har cheez ka live location ON hai - Map pe dekho!</div>`;i.value='';}
+
+let clk=0;document.getElementById('mainHeader').onclick=()=>{clk++;if(clk>=5){clk=0;openPop("🔐 PIN Dalain:",true,true,'pin');}setTimeout(()=>clk=0,2500);};
+try{map=L.map('map').setView([24.8607,67.0011],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);userMarker=L.marker([24.8607,67.0011]).addTo(map).bindPopup("📍 Aap");riderMarker=L.marker([24.85,66.99],{icon:L.divIcon({html:'🏍️',className:'',iconSize:[24,24]})}).addTo(map).bindPopup("🏍️ Rider LIVE");}catch(e){}
 let dev=false;setInterval(()=>{if(window.outerHeight-window.innerHeight>200){if(!dev){dev=true;document.getElementById('joker').style.display='flex';}}},1500);
 renderF();
 </script>
