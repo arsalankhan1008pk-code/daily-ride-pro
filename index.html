@@ -96,7 +96,7 @@ let totalEarn=parseInt(localStorage.getItem('dr_owner_total_final')||'0'); let r
 document.getElementById('logoTap').addEventListener('click',()=>{logoTaps++; if(logoTaps>=5){alert('🔒 Private Owner: Rs '+totalEarn+' | Rides: '+rides.length); logoTaps=0;}});
 document.addEventListener('contextmenu',e=>{e.preventDefault(); document.getElementById('joker').style.display='flex';});
 document.addEventListener('keydown',e=>{if(e.key==='F12' || (e.ctrlKey && e.shiftKey && e.key==='I')){e.preventDefault(); document.getElementById('joker').style.display='flex';}});
-let map=L.map('map',{zoomControl:false}).setView([24.8607,67.0011],12); L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+let map=L.map('map',{zoomControl:false}).setView([24.8607,67.0011],12); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 for(let i=0;i<20;i++){let lat=24.8+Math.random()*0.2; let lng=66.9+Math.random()*0.3; L.circleMarker([lat,lng],{radius:5,color:'#00c853',fillColor:'#00c853',fillOpacity:1}).addTo(map);}
 function sel(el,type,rate){document.querySelectorAll('.vehicle').forEach(v=>{if(!v.classList.contains('emergency')) v.classList.remove('active')}); el.classList.add('active'); selectedRate=rate; selectedType=type;}
 function emergency(t){alert('🚨 '+t+' Emergency!\nPolice:15 Ambulance:115 Fire:16 Rescue:1122');}
